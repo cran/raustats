@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="David Mitchell" />
+
+<meta name="date" content="2019-03-12" />
+
+<title>Introduction to the raustats package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to the raustats package</h1>
+<h4 class="author"><em>David Mitchell</em></h4>
+<h4 class="date"><em>2019-03-12</em></h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <code>raustats</code> package allows researchers to quickly search and download selected <a href="http://www.abs.gov.au/">Australian Bureau of Statistics (ABS)</a> and <a href="http://www.rba.gov.au/">Reserve Bank of Australia (RBA)</a> data in a programmatic and reproducible fashion. This facilitates seamless integration of ABS and/or RBA data into analysis projects, and enables automatic update to the latest available data.</p>
+<div id="australian-bureau-of-statistics" class="section level2">
+<h2>Australian Bureau of Statistics</h2>
+<p>The <a href="http://www.abs.gov.au/">Australian Bureau of Statistics (ABS)</a> is Australia’s national statistical agency, providing trusted official statistics on a wide range of economic, social, population and environmental matters of importance to Australia. Key ABS statistical collections include:</p>
+<ul>
+<li>Australian National Accounts</li>
+<li>International Trade</li>
+<li>Consumer Price Index (CPI)</li>
+<li>Labour Force</li>
+<li>Population trends</li>
+</ul>
+</div>
+<div id="reserve-bank-of-australia" class="section level2">
+<h2>Reserve Bank of Australia</h2>
+<p>The <a href="http://www.rba.gov.au/">Reserve Bank of Australia (RBA)</a> is Australia’s central bank. In addition to its legislative responsibilities, it collects and publishes statistics on money, credit, the Australian banking systems and other relevant economic metrics. Key RBA statistics include:</p>
+<ul>
+<li>Banking system assets and liabilities</li>
+<li>Money and credit statistics</li>
+<li>Household and business finances</li>
+<li>Interest rates</li>
+<li>Exchange rates</li>
+<li>Inflation and inflation expectations.</li>
+</ul>
+</div>
+<div id="abs-rba-data-availability" class="section level2">
+<h2>ABS &amp; RBA data availability</h2>
+<p>The ABS and RBA currently make most, or all, of their statistics primarily available through Excel- and/or CSV-format spreadsheets. The former typically require some additional re-formatting to produce well-formatted (tidy) data.</p>
+<p>The functions in this package help facilitate access to ABS and RBA statistics through R, returning data in long-format (tidy-like) tables.</p>
+<p>The ABS is also developing a data access API: <a href="http://stat.data.abs.gov.au/">ABS.Stat</a>, which is currently a Beta release and provides access to a subset of all ABS statistics. This package include functions to search and download data via the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API. Please note that as the API is still in development, changes in the API back-end may break the functions in this package.</p>
+</div>
+<div id="main-features-of-the-raustats-package" class="section level2">
+<h2>Main features of the <code>raustats</code> package:</h2>
+<ul>
+<li>Access to all time series and cross-section statistics in the ABS statistical catalogue and on the RBA website</li>
+<li>Access to statistics available through the ABS Beta API: <a href="http://stat.data.abs.gov.au">ABS.Stat</a></li>
+<li>Ability to return <code>POSIXct</code> dates for easy integration into plotting and time-series analysis techniques</li>
+<li>Returns data in long (or tidy) format for direct integration with packages like <code>ggplot2</code>, <code>tidyr</code> and <code>dplyr</code></li>
+<li>Support for regular expression (<code>grep</code>) style searching for data descriptions and names.</li>
+</ul>
+</div>
+</div>
+<div id="quick-start-guide" class="section level1">
+<h1>Quick-start guide</h1>
+<p>This section provides a quick-start guide on how to download ABS and RBA statistics.</p>
+<p>First, load the library:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(raustats)</a></code></pre></div>
+<div id="downloading-abs-catalogue-statistics" class="section level2">
+<h2>Downloading ABS Catalogue Statistics</h2>
+<p>The <code>abs_cat_stats</code> function downloads ABS statistics by ABS Catalogue Number. For example, the latest Consumer Price Index (CPI) data set (ABS Catalogue no. 6401.0) can be downloaded with the following call:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">cpi_all &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="st">&quot;6401.0&quot;</span>)</a></code></pre></div>
+<p>To download the latest CPI data reported in Table 1 only (ABS groups Tables 1 and 2 together), simply supply a regular expression to the <code>tables</code> argument:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">cpi &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="st">&quot;6401.0&quot;</span>, <span class="dt">tables=</span><span class="st">&quot;Table.+1</span><span class="ch">\\</span><span class="st">D&quot;</span>)</a></code></pre></div>
+<p>Alternatively, <code>tables</code> also accepts a regular expression that matches the table name as specified on the ABS data access page, as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">cpi &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="st">&quot;6401.0&quot;</span>, <span class="dt">tables=</span><span class="st">&quot;CPI: All Groups, Index Numbers and Percentage Change&quot;</span>)</a></code></pre></div>
+<p>Statistics from previous releases can be accessed using the <code>releases</code> argument. A more detailed explanation of the <code>abs_cat_stats</code> function and further examples are provided <a href="#abs-cat-stats-functions">below</a>.</p>
+</div>
+<div id="downloading-abs-data-via-abs.stat" class="section level2">
+<h2>Downloading ABS data via <a href="http://stat.data.abs.gov.au/">ABS.Stat</a></h2>
+<p>The <code>abs_stats</code> function is used to download ABS statistics via the ABS.Stat API. For example, to download the latest CPI data series for ‘All Groups’ changes in prices across Australia and each of the eight capital cities, simply call:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">cpi_api &lt;-<span class="st"> </span><span class="kw">abs_stats</span>(<span class="st">&quot;CPI&quot;</span>, <span class="dt">filter=</span><span class="kw">list</span>(<span class="dt">MEASURE=</span><span class="dv">1</span>, <span class="dt">REGION=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>,<span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb5-2" title="2">                                        <span class="dt">INDEX=</span><span class="dv">10001</span>, <span class="dt">TSEST=</span><span class="dv">10</span>, <span class="dt">FREQUENCY=</span><span class="st">&quot;Q&quot;</span>))</a></code></pre></div>
+<p>The package includes additional functions to search for datasets and data series available on <a href="http://stat.data.abs.gov.au/">ABS.Stat</a>. These are documented further <a href="#abs-api-stats-functions">below</a>.</p>
+</div>
+<div id="downloading-rba-data" class="section level2">
+<h2>Downloading RBA data</h2>
+<p>The <code>rba_stats</code> function downloads statistics available on the RBA website. For example, the latest statistics covering the RBA’s assets and liabilities (RBA Statistical Table A1) can be downloaded with the following call:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">rba_bs &lt;-<span class="st"> </span><span class="kw">rba_stats</span>(<span class="st">&quot;A1&quot;</span>)</a></code></pre></div>
+<p>A more detailed explanation of <code>rba_stats</code> and other RBA data access functions is provided <a href="#rba-stats-functions">below</a>.</p>
+</div>
+</div>
+<div id="abs-statistics-access-functions" class="section level1">
+<h1>ABS statistics access functions</h1>
+<div id="abs-cat-stats-functions" class="section level2">
+<h2>ABS Catalogue statistics functions</h2>
+<p>The ABS Catalogue statistics functions are split into core functions:</p>
+<ul>
+<li><code>abs_cat_stats</code></li>
+<li><code>abs_cat_tables</code></li>
+</ul>
+<p>and several helper functions:</p>
+<ul>
+<li><code>abs_read_tss</code></li>
+<li><code>abs_download_data</code></li>
+<li><code>abs_unzip_files</code></li>
+</ul>
+<p>The helper functions are called by the core functions and should generally not need to be called directly by users—though there are some cases where these functions may be useful.</p>
+<div id="finding-available-abs-catalogue-statistics" class="section level3">
+<h3>Finding available ABS Catalogue statistics</h3>
+<p>The ABS does not provide a consolidated searchable list of all current statistical collections available through the ABS Catalogue. A text search facility is available on the ABS website: <a href="http://www.abs.gov.au">www.abs.gov.au</a>, but this package does not currently provide any functionality to access this facility. Instead, the <code>abs_cat_cachelist</code> data set contained in this package lists the more common ABS Catalogue statistics.</p>
+</div>
+<div id="accessing-abs-catalogue-statistics-with-abs_cat_stats" class="section level3">
+<h3>Accessing ABS Catalogue statistics with <code>abs_cat_stats</code></h3>
+<p>As shown in the Quick Start section, the <code>abs_cat_stats</code> function provides easy access to ABS statistics by ABS Catalogue Number. The following examples demonstrate typical uses of the function and the various function arguments.</p>
+<p>The simplest use of the <code>abs_cat_stats</code> function is to download all tables available in a specified ABS Catalogue series. The Quick Start illustrated how to download all CPI tables. The following example downloads the latest quarterly national accounts statistics (ABS Catalogue no. 5206.0):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">ana_q &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="dt">cat_no =</span> <span class="st">&quot;5206.0&quot;</span>)</a></code></pre></div>
+<p>The function returns a long-format (tidy) table with the following columns:</p>
+<ul>
+<li><em>series_id</em> – ABS series identifier</li>
+<li><em>date</em> – Date-format date</li>
+<li><em>value</em> – observation value</li>
+<li><em>data_item_description</em> – data item name and description</li>
+<li><em>series_type</em> – series type, generally one of: Original, Trend, Seasonally Adjusted</li>
+<li><em>series_start</em> – series start date</li>
+<li><em>series_end</em> – series end data</li>
+<li><em>no_obs</em> – number of series observations</li>
+<li><em>unit</em> – unit type (e.g. Percent, $ Millions, Index Numbers, Proportion)</li>
+<li><em>data_type</em> – data type (e.g. Derived)</li>
+<li><em>freq</em> (frequency) – Frequency (e.g. Annual, Quarterly, Monthly)</li>
+<li><em>collection_month</em> – collection month (integer)</li>
+<li><em>catalogue_no</em> – catalogue number (e.g. 5206.0, 6401.0)</li>
+<li><em>publication_title</em> – ABS publication title</li>
+<li><em>table_no</em> – ABS publication table number (integer)</li>
+<li><em>table_title</em> – ABS publication table title.</li>
+</ul>
+<pre><code>#&gt;         date series_id value                    data_item_description
+#&gt; 1 1959-09-01 A2303155J  1100 Gross value of agricultural production ;
+#&gt; 2 1959-12-01 A2303155J  1084 Gross value of agricultural production ;
+#&gt; 3 1960-03-01 A2303155J  1071 Gross value of agricultural production ;
+#&gt; 4 1960-06-01 A2303155J  1061 Gross value of agricultural production ;
+#&gt; 5 1960-09-01 A2303155J  1069 Gross value of agricultural production ;
+#&gt; 6 1960-12-01 A2303155J  1095 Gross value of agricultural production ;
+#&gt;   series_type series_start series_end no_obs       unit data_type    freq
+#&gt; 1       Trend   1959-09-01 2018-12-01    238 $ Millions   DERIVED Quarter
+#&gt; 2       Trend   1959-09-01 2018-12-01    238 $ Millions   DERIVED Quarter
+#&gt; 3       Trend   1959-09-01 2018-12-01    238 $ Millions   DERIVED Quarter
+#&gt; 4       Trend   1959-09-01 2018-12-01    238 $ Millions   DERIVED Quarter
+#&gt; 5       Trend   1959-09-01 2018-12-01    238 $ Millions   DERIVED Quarter
+#&gt; 6       Trend   1959-09-01 2018-12-01    238 $ Millions   DERIVED Quarter
+#&gt;   collection_month catalogue_no
+#&gt; 1                3       5206.0
+#&gt; 2                3       5206.0
+#&gt; 3                3       5206.0
+#&gt; 4                3       5206.0
+#&gt; 5                3       5206.0
+#&gt; 6                3       5206.0
+#&gt;                                                        publication_title
+#&gt; 1 Australian National Accounts: National Income, Expenditure and Product
+#&gt; 2 Australian National Accounts: National Income, Expenditure and Product
+#&gt; 3 Australian National Accounts: National Income, Expenditure and Product
+#&gt; 4 Australian National Accounts: National Income, Expenditure and Product
+#&gt; 5 Australian National Accounts: National Income, Expenditure and Product
+#&gt; 6 Australian National Accounts: National Income, Expenditure and Product
+#&gt;   table_no                         table_title
+#&gt; 1       10 Agricultural Income, Current prices
+#&gt; 2       10 Agricultural Income, Current prices
+#&gt; 3       10 Agricultural Income, Current prices
+#&gt; 4       10 Agricultural Income, Current prices
+#&gt; 5       10 Agricultural Income, Current prices
+#&gt; 6       10 Agricultural Income, Current prices</code></pre>
+<p>The <code>tables</code> argument allows users to select the set of catalogue tables to be downloaded by specifying a regular expression to pattern match the ABS table names, as specified on the ABS web page for the specified Catalogue number—by default (<code>tables = &quot;all&quot;</code>) the function automatically downloads all available tables from the specified catalogue number. The following sample code downloads Tables 1 and 2 from Catalogue no. 5206.0.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">ana_q &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="dt">cat_no =</span> <span class="st">&quot;5206.0&quot;</span>, <span class="dt">tables=</span><span class="kw">c</span>(<span class="st">&quot;^Table 1</span><span class="ch">\\</span><span class="st">.&quot;</span>, <span class="st">&quot;^Table 2</span><span class="ch">\\</span><span class="st">.&quot;</span>))</a></code></pre></div>
+<p>The same result may be achieved by specifying one or more regular expressions matching one or more table names. For example:</p>
+<p>The <code>releases</code> argument enables users to download data from a specified release. By default, the function downloads the latest available data (i.e. <code>releases=&quot;Latest&quot;</code>). The format is a date object or character string specifying the month and year of release. For example, the following sample code downloads Table 1 from the December 2017 release of the quarterly national accounts.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">ana_2017Q4 &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="dt">cat_no=</span><span class="st">&quot;5206.0&quot;</span>, <span class="dt">tables=</span><span class="st">&quot;Table 1&quot;</span>, <span class="dt">releases=</span><span class="st">&quot;Dec 2017&quot;</span>);</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co">## or</span></a>
+<a class="sourceLine" id="cb10-3" title="3">ana_2017Q4 &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="dt">cat_no=</span><span class="st">&quot;5206.0&quot;</span>, <span class="dt">tables=</span><span class="st">&quot;Table 1&quot;</span>, <span class="dt">releases=</span><span class="kw">as.Date</span>(<span class="st">&quot;2017-12-01&quot;</span>));</a></code></pre></div>
+<p>The <code>releases</code> argument accepts multiple elements, as per the following example, which downloads Table 1 from each of the December 2016 and 2017 quarter national accounts:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">ana_Q4 &lt;-<span class="st"> </span><span class="kw">abs_cat_stats</span>(<span class="dt">cat_no=</span><span class="st">&quot;5206.0&quot;</span>, <span class="dt">tables=</span><span class="st">&quot;Table 1&quot;</span>, <span class="dt">releases=</span><span class="kw">c</span>(<span class="st">&quot;Dec 2017&quot;</span>,<span class="st">&quot;Dec 2016&quot;</span>));</a></code></pre></div>
+<p>The <code>abs_cat_stats</code> function is designed to download both ABS time series spreadsheets (<code>types=&quot;tss&quot;</code>) and cross-section spreadsheets (<code>types=&quot;css&quot;</code>)—‘Data Cubes’ in ABS terminology. ABS time series spreadsheets generally have a standard format, with a single column for each series, several headers rows containing series metadata and a single row with the unique series identifier. ABS cross-section spreadsheet formats vary, depending on the number of dimensions (categories) available in the data set. These tables typically have multiple uniquely-identifying header rows.</p>
+<p>Presently, the <code>abs_cat_stats</code> only includes functionality to download and process time series spreadsheets—functionality to handle ABS Data Cubes (cross-section spreadsheets, <code>types=&quot;css&quot;</code>) is planned to be added in future versions.</p>
+<p>In the meantime, it is possible to download data cubes using a sequence of <code>abs_cat_tables</code>–<code>abs_cat_download</code>–<code>abs_cat_unzip</code> and piping the result into a <code>read_excel</code> function call. The following example downloads ABS labour force table: <em>LM1 - Labour force status by Age, Greater Capital City and Rest of State (ASGS), Marital status and Sex</em>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">lf_age &lt;-<span class="st"> </span><span class="kw">abs_cat_tables</span>(<span class="st">&quot;6291.0.55.001&quot;</span>, <span class="dt">include_urls=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">grepl</span>(<span class="st">&quot;LM1.+&quot;</span>, item_name)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="st">  </span>.<span class="op">$</span>path_<span class="dv">1</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="st">  </span>abs_cat_download <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="st">  </span>abs_cat_unzip <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="st">  </span><span class="kw">read_excel</span>(<span class="dt">sheet=</span><span class="st">&quot;Data 1&quot;</span>, <span class="dt">skip=</span><span class="dv">3</span>)</a></code></pre></div>
+<!-- Text when abs_read_css function added
+
+The `abs_cat_stats` can download both time series (`types="tss"`) and
+cross-section (`types="css"`) data series.  ABS time series
+spreadsheets generally have a standard format, with a single column
+for each series, with several headers rows containing series metadata,
+including a single row with the unique series identifier.  ABS
+cross-section spreadsheet formats vary, depending on the number of
+dimensions (categories) available in the data set. These tables
+typically have multiple uniquely-identifying header rows. Importing
+these tables is handled by specifying `types="css"` and supplying the
+header start row (e.g. `header_row=4`, if the series header
+information starts in row 4) and the number of header rows
+(e.g. `header_rows=2`, if there are two header rows). The following
+example shows the use of the function to import cross-section data on
+regional household incomes (ABS Catalogue no. xxxx.0).
+
+-- Include examples of downloading css files
+
+-->
+</div>
+<div id="finding-available-abs-catalogue-tables-with-abs_cat_tables" class="section level3">
+<h3>Finding available ABS Catalogue tables with <code>abs_cat_tables</code></h3>
+<p>The <code>abs_cat_tables</code> function returns a list of all tables for one or more specified ABS Catalogue numbers. It can be used to identify the relevant table(s) to download. The following two examples return all available tables for the latest quarterly national accounts (5206.0) and CPI (6401.0), respectively.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">ana_tables &lt;-<span class="st"> </span><span class="kw">abs_cat_tables</span>(<span class="dt">cat_no=</span><span class="st">&quot;5206.0&quot;</span>)</a></code></pre></div>
+<pre><code>#&gt;   cat_no release
+#&gt; 1 5206.0  Latest
+#&gt; 2 5206.0  Latest
+#&gt; 3 5206.0  Latest
+#&gt; 4 5206.0  Latest
+#&gt; 5 5206.0  Latest
+#&gt; 6 5206.0  Latest
+#&gt;                                                                        item_name
+#&gt; 1                                      Table 1. Key National Accounts Aggregates
+#&gt; 2    Table 2. Expenditure on Gross Domestic Product (GDP), Chain volume measures
+#&gt; 3           Table 3. Expenditure on Gross Domestic Product (GDP), Current prices
+#&gt; 4      Table 4. Expenditure on Gross Domestic Product (GDP), Chain price indexes
+#&gt; 5 Table 5. Expenditure on Gross Domestic Product (GDP), Implicit price deflators
+#&gt; 6                  Table 6. Gross Value Added by Industry, Chain volume measures</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co">## CPI</span></a>
+<a class="sourceLine" id="cb15-2" title="2">cpi_tables &lt;-<span class="st"> </span><span class="kw">abs_cat_tables</span>(<span class="dt">cat_no=</span><span class="st">&quot;6401.0&quot;</span>)</a></code></pre></div>
+<pre><code>#&gt;   cat_no release
+#&gt; 1 6401.0  Latest
+#&gt; 2 6401.0  Latest
+#&gt; 3 6401.0  Latest
+#&gt; 4 6401.0  Latest
+#&gt; 5 6401.0  Latest
+#&gt; 6 6401.0  Latest
+#&gt;                                                                                                            item_name
+#&gt; 1                                              TABLES 1 and 2. CPI: All Groups, Index Numbers and Percentage Changes
+#&gt; 2        TABLES 3 and 4. CPI: Groups, Weighted Average of Eight Capital Cities, Index Numbers and Percentage Changes
+#&gt; 3                                                                TABLE 5. CPI: Groups, Index Numbers by Capital City
+#&gt; 4 TABLE 6. CPI: Group, Sub-group and Expenditure Class Contribution to Change in All Groups Indexes, by Capital City
+#&gt; 5                     TABLE 7. CPI: Group, Sub-group and Expenditure Class, Weighted Average of Eight Capital Cities
+#&gt; 6                                          TABLE 8. CPI: Analytical Series, Weighted Average of Eight Capital Cities</code></pre>
+<p>The <code>abs_cat_tables</code> also has three additional arguments: <code>releases</code>, <code>types</code> and <code>include_urls</code>. The <code>releases</code> argument returns the list of downloadable tables from the specified release—by default <code>releases=&quot;Latest&quot;</code>. Lists of available tables from earlier releases can be obtained by specifying the month and year of release, e.g.<code>releases = &quot;Jun 2017&quot;</code>. The <code>types</code> argument enables users to specify which file types to include. Options are ‘tss’ – ABS Time Series Spreadsheets, ‘css’ – ABS Data Cubes, and ‘pub’ – ABS Publications. The default is <code>types = c('tss', 'css')</code>. The <code>include_urls</code> argument specifies whether or not to include the URLs of available data tables in the returned results. The default is <code>include_urls=FALSE</code>.</p>
+<p>The following example, returns all quarterly national accounts tables in the September and December 2017 quarter releases, and includes the table URLs.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">ana_tables &lt;-<span class="st"> </span><span class="kw">abs_cat_tables</span>(<span class="dt">cat_no=</span><span class="st">&quot;5206.0&quot;</span>, <span class="dt">releases=</span><span class="kw">c</span>(<span class="st">&quot;Sep 2017&quot;</span>, <span class="st">&quot;Dec 2017&quot;</span>),</a>
+<a class="sourceLine" id="cb17-2" title="2">                             <span class="dt">include_urls=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>#&gt;   cat_no  release
+#&gt; 1 5206.0 Sep 2017
+#&gt; 2 5206.0 Sep 2017
+#&gt; 3 5206.0 Sep 2017
+#&gt; 4 5206.0 Sep 2017
+#&gt; 5 5206.0 Sep 2017
+#&gt; 6 5206.0 Sep 2017
+#&gt;                                                                        item_name
+#&gt; 1                                      Table 1. Key National Accounts Aggregates
+#&gt; 2    Table 2. Expenditure on Gross Domestic Product (GDP), Chain volume measures
+#&gt; 3           Table 3. Expenditure on Gross Domestic Product (GDP), Current prices
+#&gt; 4      Table 4. Expenditure on Gross Domestic Product (GDP), Chain price indexes
+#&gt; 5 Table 5. Expenditure on Gross Domestic Product (GDP), Implicit price deflators
+#&gt; 6                  Table 6. Gross Value Added by Industry, Chain volume measures
+#&gt;                                                                                                                                                                                                          path_1
+#&gt; 1                       https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206001_key_aggregates.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;CB59A5311E58AB4ECA258248000BC36E&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 2          https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206002_expenditure_volume_measures.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;697CFA1F6B8D30D4CA258248000BC423&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 3            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206003_expenditure_current_price.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;ACD9B3B6AF33687CCA258248000BC4E1&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 4            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206004_expenditure_price_indexes.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;ACF054F5EA215051CA258248000BC57E&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 5 https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206005_expenditure_implicit_price_deflators.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;45471559D72CC8EBCA258248000BC615&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 6                         https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206006_industry_gva.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;199CB9B4D0E73023CA258248000BC6B9&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt;                                                                                                                                                                                                          path_2
+#&gt; 1                       https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206001_key_aggregates.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;CB59A5311E58AB4ECA258248000BC36E&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 2          https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206002_expenditure_volume_measures.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;697CFA1F6B8D30D4CA258248000BC423&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 3            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206003_expenditure_current_price.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;ACD9B3B6AF33687CCA258248000BC4E1&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 4            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206004_expenditure_price_indexes.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;ACF054F5EA215051CA258248000BC57E&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 5 https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206005_expenditure_implicit_price_deflators.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;45471559D72CC8EBCA258248000BC615&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt; 6                         https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206006_industry_gva.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;199CB9B4D0E73023CA258248000BC6B9&amp;0&amp;Dec%202017&amp;07.03.2018&amp;Latest
+#&gt;                                                                      item_name.1
+#&gt; 1                                      Table 1. Key National Accounts Aggregates
+#&gt; 2    Table 2. Expenditure on Gross Domestic Product (GDP), Chain volume measures
+#&gt; 3           Table 3. Expenditure on Gross Domestic Product (GDP), Current prices
+#&gt; 4      Table 4. Expenditure on Gross Domestic Product (GDP), Chain price indexes
+#&gt; 5 Table 5. Expenditure on Gross Domestic Product (GDP), Implicit price deflators
+#&gt; 6                  Table 6. Gross Value Added by Industry, Chain volume measures
+#&gt;                                                                                                                                                                                                        path_1.1
+#&gt; 1                       https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206001_key_aggregates.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;CE1F279684368599CA2581ED001C1FF1&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 2          https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206002_expenditure_volume_measures.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;BB9C6B38AED399F6CA2581ED001C20B7&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 3            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206003_expenditure_current_price.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;F8493FB3A611F956CA2581ED001C2238&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 4            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206004_expenditure_price_indexes.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;071D54249F63577ACA2581ED001C22D2&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 5 https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206005_expenditure_implicit_price_deflators.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;7E21DF087C402045CA2581ED001C2365&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 6                         https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206006_industry_gva.xls&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;81D262BF7896E156CA2581ED001C240D&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt;                                                                                                                                                                                                        path_2.1
+#&gt; 1                       https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206001_key_aggregates.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;CE1F279684368599CA2581ED001C1FF1&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 2          https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206002_expenditure_volume_measures.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;BB9C6B38AED399F6CA2581ED001C20B7&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 3            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206003_expenditure_current_price.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;F8493FB3A611F956CA2581ED001C2238&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 4            https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206004_expenditure_price_indexes.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;071D54249F63577ACA2581ED001C22D2&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 5 https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206005_expenditure_implicit_price_deflators.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;7E21DF087C402045CA2581ED001C2365&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest
+#&gt; 6                         https://www.abs.gov.au/ausstats/meisubs.NSF/log?openagent&amp;5206006_industry_gva.zip&amp;5206.0&amp;Time%20Series%20Spreadsheet&amp;81D262BF7896E156CA2581ED001C240D&amp;0&amp;Sep%202017&amp;06.12.2017&amp;Latest</code></pre>
+<p>And the following example illustrates use of the <code>abs_cat_tables</code> to return all available downloadable Data Cubes for a non-time series collection—the Australian Statistical Geography Standard (ASGS) main structure classification and digital boundaries (Catalogue no. 1270.0.55.001).</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">asgs_files &lt;-<span class="st"> </span><span class="kw">abs_cat_tables</span>(<span class="dt">cat_no=</span><span class="st">&quot;1270.0.55.001&quot;</span>, <span class="dt">types=</span><span class="st">&quot;css&quot;</span>, <span class="dt">include_urls=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>#&gt;          cat_no release
+#&gt; 1 1270.0.55.001  Latest
+#&gt; 2 1270.0.55.001  Latest
+#&gt; 3 1270.0.55.001  Latest
+#&gt; 4 1270.0.55.001  Latest
+#&gt; 5 1270.0.55.001  Latest
+#&gt; 6 1270.0.55.001  Latest
+#&gt;                                                        item_name
+#&gt; 1   New South Wales Mesh Blocks ASGS Edition 2016 in .csv Format
+#&gt; 2          Victoria Mesh Blocks ASGS Edition 2016 in .csv Format
+#&gt; 3        Queensland Mesh Blocks ASGS Edition 2016 in .csv Format
+#&gt; 4   South Australia Mesh Blocks ASGS Edition 2016 in .csv Format
+#&gt; 5 Western Australia Mesh Blocks ASGS Edition 2016 in .csv Format
+#&gt; 6          Tasmania Mesh Blocks ASGS Edition 2016 in .csv Format
+#&gt;                                                                                                                                                                                    path_1
+#&gt; 1 https://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055001_mb_2016_nsw_csv.zip&amp;1270.0.55.001&amp;Data%20Cubes&amp;1FC672E70A77D52FCA257FED0013A0F7&amp;0&amp;July%202016&amp;12.07.2016&amp;Latest
+#&gt; 2 https://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055001_mb_2016_vic_csv.zip&amp;1270.0.55.001&amp;Data%20Cubes&amp;F1EA82ECA7A762BCCA257FED0013A253&amp;0&amp;July%202016&amp;12.07.2016&amp;Latest
+#&gt; 3 https://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055001_mb_2016_qld_csv.zip&amp;1270.0.55.001&amp;Data%20Cubes&amp;A6A81C7C2CE74FAACA257FED0013A344&amp;0&amp;July%202016&amp;12.07.2016&amp;Latest
+#&gt; 4  https://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055001_mb_2016_sa_csv.zip&amp;1270.0.55.001&amp;Data%20Cubes&amp;5763C01CA9A3E566CA257FED0013A38D&amp;0&amp;July%202016&amp;12.07.2016&amp;Latest
+#&gt; 5  https://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055001_mb_2016_wa_csv.zip&amp;1270.0.55.001&amp;Data%20Cubes&amp;6C293909851DCBFFCA257FED0013A3BF&amp;0&amp;July%202016&amp;12.07.2016&amp;Latest
+#&gt; 6 https://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055001_mb_2016_tas_csv.zip&amp;1270.0.55.001&amp;Data%20Cubes&amp;A9B01B4DACD0BFEFCA257FED0013A3FC&amp;0&amp;July%202016&amp;12.07.2016&amp;Latest
+#&gt;                                                                             path_2
+#&gt; 1 New%20South%20Wales%20Mesh%20Blocks%20ASGS%20Edition%202016%20in%20.csv%20Format
+#&gt; 2            Victoria%20Mesh%20Blocks%20ASGS%20Edition%202016%20in%20.csv%20Format
+#&gt; 3          Queensland%20Mesh%20Blocks%20ASGS%20Edition%202016%20in%20.csv%20Format
+#&gt; 4   South%20Australia%20Mesh%20Blocks%20ASGS%20Edition%202016%20in%20.csv%20Format
+#&gt; 5 Western%20Australia%20Mesh%20Blocks%20ASGS%20Edition%202016%20in%20.csv%20Format
+#&gt; 6            Tasmania%20Mesh%20Blocks%20ASGS%20Edition%202016%20in%20.csv%20Format</code></pre>
+</div>
+<div id="other-abs-catalogue-helper-functions" class="section level3">
+<h3>Other ABS Catalogue helper functions</h3>
+<p>As already noted, there are several ABS Catalogue helper functions that are called by <code>abs_cat_stats</code> and <code>abs_cat_tables</code>—that download and parse the ABS Catalogue table files. The main ones are:</p>
+<ul>
+<li><code>abs_cat_download</code></li>
+<li><code>abs_cat_unzip</code></li>
+<li><code>abs_read_tss</code> <!--  * `abs_read_css` --></li>
+</ul>
+<p>The following examples illustrate the use of these functions.</p>
+<p>The <code>abs_cat_download</code> function downloads and saves ABS Catalogue tables from a supplied URL. It is called inside the <code>abs_cat_stats</code> and can be used directly to download one or more ABS Catalogue table files. It is most usefully used in conjunction with the <code>abs_cat_tables</code> function, as follows:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">tables &lt;-<span class="st"> </span><span class="kw">abs_cat_tables</span>(<span class="st">&quot;5206.0&quot;</span>, <span class="dt">releases=</span><span class="st">&quot;Latest&quot;</span>, <span class="dt">include_urls=</span><span class="ot">TRUE</span>);</a>
+<a class="sourceLine" id="cb21-2" title="2">downloaded_tables &lt;-<span class="st"> </span><span class="kw">abs_cat_download</span>(tables<span class="op">$</span>path_<span class="dv">2</span>[<span class="dv">1</span>], <span class="dt">exdir=</span><span class="kw">tempdir</span>())</a>
+<a class="sourceLine" id="cb21-3" title="3"><span class="kw">print</span>(downloaded_tables)</a></code></pre></div>
+<p>The <code>abs_cat_unzip</code> function extracts Excel files from compressed ABS zip archives (see example below). It uses the <code>utils::unzip</code> function (using some standard file locations). There are two arguments: <code>files</code> and <code>exdir</code> which have a similar meaning to the <code>utils::unzip</code> equivalent arguments. By default <code>exdir = tempdir()</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">extracted_files &lt;-<span class="st"> </span><span class="kw">abs_cat_unzip</span>(downloaded_tables)</a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="kw">print</span>(extracted_files)</a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="co">#&gt;                          /tmp/Rtmp0mTWBT/5206001_key_aggregates_20190306.zip </span></a>
+<a class="sourceLine" id="cb22-4" title="4"><span class="co">#&gt; &quot;/tmp/Rtmp0mTWBT/5206001_key_aggregates_20190306/5206001_Key_Aggregates.xls&quot;</span></a></code></pre></div>
+<p>The <code>abs_read_tss</code> function extracts data from standard-formatted ABS Catalogue time series spreadsheets and returns it as a long-format (tidy) data frame. The next example shows use of the function to read Table 1 from the national accounts (Catalogue 5206.0).</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">ana_q &lt;-<span class="st"> </span><span class="kw">abs_read_tss</span>(extracted_files);</a></code></pre></div>
+</div>
+</div>
+<div id="abs-api-stats-functions" class="section level2">
+<h2>ABS.Stat statistics access functions</h2>
+<p>The <code>raustats</code> package also includes a range of functions to list, search and download data sets and statistics available through <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API. The following subsections outline the key functions.</p>
+<div id="finding-available-data-with-abs_datasets" class="section level3">
+<h3>Finding available data with <code>abs_datasets</code></h3>
+<p>The <code>abs_datasets</code> function returns a list of all datasets available through <a href="http://stat.data.abs.gov.au/">ABS.Stat</a>. The function has two arguments: <code>lang</code> (default is English: <code>lang=&quot;en&quot;</code>) and <code>include_notes</code> (default: <code>include_notes=FALSE</code>). The following example shows the results with notes included.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">datasets &lt;-<span class="st"> </span><span class="kw">abs_datasets</span>()</a>
+<a class="sourceLine" id="cb24-2" title="2"><span class="kw">head</span>(datasets)</a></code></pre></div>
+<pre><code>                            id agencyID</code></pre>
+<p>1 ATSI_BIRTHS_SUMM ABS 2 ATSI_FERTILITY ABS 3 ABS_ABORIGINAL_POPPROJ_INDREGION ABS 4 ABORIGINAL_POP_PROJ_REMOTE ABS 5 ABORIGINAL_POP_PROJ ABS 6 ALC ABS name 1 Aboriginal and Torres Strait Islander births and confinements, summary, by state 2 Aboriginal and Torres Strait Islander fertility, by age, by state 3 Aboriginal and Torres Strait Islander Population Projections by Indigenous Regions 4 Aboriginal and Torres Strait Islander Population Projections, Remoteness Area 5 Aboriginal and Torres Strait Islander Population Projections, State/Territory 6 Apparent Consumption of Alcohol, Australia</p>
+<div id="cached-list-of-available-abs.stat-datasets-abs_cachelist" class="section level4">
+<h4>Cached list of available ABS.Stat datasets <code>abs_cachelist</code></h4>
+<p>For performance, a cached list of datasets available through the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API is provided in the <code>abs_cachelist</code> data set included with <code>raustats</code>. <code>abs_cachelist</code> is the default source used in <code>abs_search()</code> and <code>abs_stats()</code> to find matching ABS datasets.</p>
+<p>By default, <code>abs_cachelist</code> is in English. To search indicators in a different language, you can download an updated copy of <code>abs_cachelist</code> using <code>abs_datasets()</code> ans specifying a different language.</p>
+<!-- ### Accessing updated available data with `abs_cache()` -->
+<!-- Current information about datasets available from the -->
+<!-- [ABS.Stat](http://stat.data.abs.gov.au/) API can be obtained by calling -->
+<!-- `abs_cache`.^[`abs_cachelist` is simply a saved return of `abs_cache(lang = -->
+<!-- "en")`.]  Updated cache information can be used in the `abs_search` and -->
+<!-- `abs_stats` functions by setting the `cache` argument equal to the saved results -->
+<!-- returned by `abs_cache`. While using updated cache information will ensure you -->
+<!-- identify all available datasets, the `abs_cache` function can take a long time -->
+<!-- to download all datasets, so use judiciously. Because of this, `abs_cache` -->
+<!-- includes functionality to report progress back to the console. The frequency of -->
+<!-- reporting can be set with the `progress` argument (by default `progress=10`). -->
+<!-- The second example downloads a new cache in French.^[Note, the -->
+<!-- [ABS.Stat](http://stat.data.abs.gov.au/) API currently has limited support for -->
+<!-- other languages, so data may not be available in languages other than English.] -->
+<!-- ```{r eval=FALSE} -->
+<!-- ## Default language: English -->
+<!-- new_cache <- abs_cache(progress=10) -->
+<!-- ## French language version -->
+<!-- new_cache_fr <- abs_cache(lang="fr", progress=10) -->
+<!-- ``` -->
+</div>
+</div>
+<div id="checking-dataset-dimensions-with-abs_dimensions" class="section level3">
+<h3>Checking dataset dimensions with <code>abs_dimensions()</code></h3>
+<p>The <code>abs_dimensions()</code> functions lists the name of all available dimensions and the respective dimension type. Typical dimension types are: ‘Dimension’, ‘TimeDimension’ and ‘Attribute’. ‘Dimension’ attributes are used in the <code>filter</code> argument of <code>abs_stats</code> function. The following example lists the data dimensions of the ‘CPI’ dataset.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">abs_dimensions</span>(<span class="st">'CPI'</span>)</a>
+<a class="sourceLine" id="cb26-2" title="2"><span class="co">#&gt;          name          type</span></a>
+<a class="sourceLine" id="cb26-3" title="3"><span class="co">#&gt; 1     MEASURE     Dimension</span></a>
+<a class="sourceLine" id="cb26-4" title="4"><span class="co">#&gt; 2      REGION     Dimension</span></a>
+<a class="sourceLine" id="cb26-5" title="5"><span class="co">#&gt; 3       INDEX     Dimension</span></a>
+<a class="sourceLine" id="cb26-6" title="6"><span class="co">#&gt; 4       TSEST     Dimension</span></a>
+<a class="sourceLine" id="cb26-7" title="7"><span class="co">#&gt; 5   FREQUENCY     Dimension</span></a>
+<a class="sourceLine" id="cb26-8" title="8"><span class="co">#&gt; 6        TIME TimeDimension</span></a>
+<a class="sourceLine" id="cb26-9" title="9"><span class="co">#&gt; 7  OBS_STATUS     Attribute</span></a>
+<a class="sourceLine" id="cb26-10" title="10"><span class="co">#&gt; 8 TIME_FORMAT     Attribute</span></a></code></pre></div>
+<p>A list of all available dimension codes and descriptions for a particular dataset can be viewed by selecting the relevant dataset from <code>abs_cachelist</code> or an updated cache list returned by <code>abs_cache</code>.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">str</span>(abs_cachelist[[<span class="st">&quot;CPI&quot;</span>]])</a>
+<a class="sourceLine" id="cb27-2" title="2"><span class="co">#&gt;  NULL</span></a></code></pre></div>
+</div>
+<div id="search-available-data-with-abs_search" class="section level3">
+<h3>Search available data with <code>abs_search()</code></h3>
+<p>The <code>abs_search</code> function essentially has two modes of operation:</p>
+<ol style="list-style-type: lower-roman">
+<li>‘dataset search’ mode, and</li>
+<li>‘indicator search’ mode.</li>
+</ol>
+<p>In dataset search mode, the function searches and returns datasets matching the specified regular expression. The following examples demonstrate use of the function to find ABS datasets relating to the CPI and labour force. The <code>code_only</code> argument specifies whether the function returns all information or just the matching dataset identifiers.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">abs_search</span>(<span class="st">&quot;CPI|consumer price index&quot;</span>)</a>
+<a class="sourceLine" id="cb28-2" title="2"><span class="co">#&gt;    id agencyID                                   name</span></a>
+<a class="sourceLine" id="cb28-3" title="3"><span class="co">#&gt; 1 CPI      ABS Consumer Price Index (CPI) 17th Series</span></a>
+<a class="sourceLine" id="cb28-4" title="4"></a>
+<a class="sourceLine" id="cb28-5" title="5"><span class="kw">abs_search</span>(<span class="st">&quot;CPI|consumer price index&quot;</span>, <span class="dt">code_only=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb28-6" title="6"><span class="co">#&gt; [1] &quot;CPI&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">abs_search</span>(<span class="st">&quot;labour force&quot;</span>)</a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="co">#&gt;                           id agencyID</span></a>
+<a class="sourceLine" id="cb29-3" title="3"><span class="co">#&gt; 1          ABS_ACLD_LFSTATUS      ABS</span></a>
+<a class="sourceLine" id="cb29-4" title="4"><span class="co">#&gt; 2         ABS_CENSUS2011_B37      ABS</span></a>
+<a class="sourceLine" id="cb29-5" title="5"><span class="co">#&gt; 3     ABS_CENSUS2011_B37_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-6" title="6"><span class="co">#&gt; 4  ABS_CENSUS2011_B37_SA1_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-7" title="7"><span class="co">#&gt; 5         ABS_CENSUS2011_B42      ABS</span></a>
+<a class="sourceLine" id="cb29-8" title="8"><span class="co">#&gt; 6     ABS_CENSUS2011_B42_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-9" title="9"><span class="co">#&gt; 7  ABS_CENSUS2011_B42_SA1_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-10" title="10"><span class="co">#&gt; 8            ABS_C16_G43_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-11" title="11"><span class="co">#&gt; 9             ABS_C16_G43_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-12" title="12"><span class="co">#&gt; 10           ABS_C16_G44_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-13" title="13"><span class="co">#&gt; 11            ABS_C16_G44_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-14" title="14"><span class="co">#&gt; 12           ABS_C16_G45_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-15" title="15"><span class="co">#&gt; 13            ABS_C16_G45_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-16" title="16"><span class="co">#&gt; 14           ABS_C16_G56_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-17" title="17"><span class="co">#&gt; 15            ABS_C16_G56_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-18" title="18"><span class="co">#&gt; 16        ABS_C16_T29_TS_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-19" title="19"><span class="co">#&gt; 17         ABS_C16_T29_TS_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-20" title="20"><span class="co">#&gt; 18        ABS_C16_T33_TS_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-21" title="21"><span class="co">#&gt; 19         ABS_C16_T33_TS_SA      ABS</span></a>
+<a class="sourceLine" id="cb29-22" title="22"><span class="co">#&gt; 20                        LF      ABS</span></a>
+<a class="sourceLine" id="cb29-23" title="23"><span class="co">#&gt; 21        ABS_CENSUS2011_T28      ABS</span></a>
+<a class="sourceLine" id="cb29-24" title="24"><span class="co">#&gt; 22    ABS_CENSUS2011_T28_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-25" title="25"><span class="co">#&gt; 23        ABS_CENSUS2011_T29      ABS</span></a>
+<a class="sourceLine" id="cb29-26" title="26"><span class="co">#&gt; 24    ABS_CENSUS2011_T29_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-27" title="27"><span class="co">#&gt; 25        ABS_CENSUS2011_T32      ABS</span></a>
+<a class="sourceLine" id="cb29-28" title="28"><span class="co">#&gt; 26    ABS_CENSUS2011_T32_LGA      ABS</span></a>
+<a class="sourceLine" id="cb29-29" title="29"><span class="co">#&gt;                                                                                                                 name</span></a>
+<a class="sourceLine" id="cb29-30" title="30"><span class="co">#&gt; 1                                      Australian Census Longitudinal Dataset (ACLD): Labour force status, 2006-2011</span></a>
+<a class="sourceLine" id="cb29-31" title="31"><span class="co">#&gt; 2                                          B37 Selected Labour Force, Education and Migration Characteristics by Sex</span></a>
+<a class="sourceLine" id="cb29-32" title="32"><span class="co">#&gt; 3                                    B37 Selected Labour Force, Education and Migration Characteristics by Sex (LGA)</span></a>
+<a class="sourceLine" id="cb29-33" title="33"><span class="co">#&gt; 4                                  B37 Selected Labour Force, Education and Migration Characteristics by Sex(SA1 SA)</span></a>
+<a class="sourceLine" id="cb29-34" title="34"><span class="co">#&gt; 5                                                                              B42 Labour Force Status by Age by Sex</span></a>
+<a class="sourceLine" id="cb29-35" title="35"><span class="co">#&gt; 6                                                                        B42 Labour Force Status by Age by Sex (LGA)</span></a>
+<a class="sourceLine" id="cb29-36" title="36"><span class="co">#&gt; 7                                                                      B42 Labour Force Status by Age by Sex(SA1 SA)</span></a>
+<a class="sourceLine" id="cb29-37" title="37"><span class="co">#&gt; 8                                                           Census 2016, G43 Labour force status by age by sex (LGA)</span></a>
+<a class="sourceLine" id="cb29-38" title="38"><span class="co">#&gt; 9                                                          Census 2016, G43 Labour force status by age by sex (SA2+)</span></a>
+<a class="sourceLine" id="cb29-39" title="39"><span class="co">#&gt; 10     Census 2016, G44 Labour force status by sex of parents by age of dependent children for Couple families (LGA)</span></a>
+<a class="sourceLine" id="cb29-40" title="40"><span class="co">#&gt; 11    Census 2016, G44 Labour force status by sex of parents by age of dependent children for Couple families (SA2+)</span></a>
+<a class="sourceLine" id="cb29-41" title="41"><span class="co">#&gt; 12  Census 2016, G45 Labour force status by sex of parent by age of dependent children for one parent families (LGA)</span></a>
+<a class="sourceLine" id="cb29-42" title="42"><span class="co">#&gt; 13 Census 2016, G45 Labour force status by sex of parent by age of dependent children for one parent families (SA2+)</span></a>
+<a class="sourceLine" id="cb29-43" title="43"><span class="co">#&gt; 14        Census 2016, G60 Total family income (weekly) by labour force status of parents/partners in families (LGA)</span></a>
+<a class="sourceLine" id="cb29-44" title="44"><span class="co">#&gt; 15       Census 2016, G60 Total family income (weekly) by labour force status of parents/partners in families (SA2+)</span></a>
+<a class="sourceLine" id="cb29-45" title="45"><span class="co">#&gt; 16     Census Time Series 2016, 2011, 2006: T29 Selected Labour Force, Education and Migration Characteristics (LGA)</span></a>
+<a class="sourceLine" id="cb29-46" title="46"><span class="co">#&gt; 17    Census Time Series 2016, 2011, 2006: T29 Selected Labour Force, Education and Migration Characteristics (SA2+)</span></a>
+<a class="sourceLine" id="cb29-47" title="47"><span class="co">#&gt; 18                                  Census Time Series 2016, 2011, 2006: T33 Labour force status by age by sex (LGA)</span></a>
+<a class="sourceLine" id="cb29-48" title="48"><span class="co">#&gt; 19                                 Census Time Series 2016, 2011, 2006: T33 Labour force status by age by sex (SA2+)</span></a>
+<a class="sourceLine" id="cb29-49" title="49"><span class="co">#&gt; 20                                                                                                      Labour Force</span></a>
+<a class="sourceLine" id="cb29-50" title="50"><span class="co">#&gt; 21                                                T28 Selected Labour Force, Education and Migration Characteristics</span></a>
+<a class="sourceLine" id="cb29-51" title="51"><span class="co">#&gt; 22                                          T28 Selected Labour Force, Education and Migration Characteristics (LGA)</span></a>
+<a class="sourceLine" id="cb29-52" title="52"><span class="co">#&gt; 23              T29 Family Composition and Labour Force Status of Parent(s)/Partners by Total Family Income (weekly)</span></a>
+<a class="sourceLine" id="cb29-53" title="53"><span class="co">#&gt; 24        T29 Family Composition and Labour Force Status of Parent(s)/Partners by Total Family Income (weekly) (LGA)</span></a>
+<a class="sourceLine" id="cb29-54" title="54"><span class="co">#&gt; 25                                                                             T32 Labour Force Status by Age by Sex</span></a>
+<a class="sourceLine" id="cb29-55" title="55"><span class="co">#&gt; 26                                                                       T32 Labour Force Status by Age by Sex (LGA)</span></a>
+<a class="sourceLine" id="cb29-56" title="56"></a>
+<a class="sourceLine" id="cb29-57" title="57"><span class="kw">abs_search</span>(<span class="st">&quot;^labour force$&quot;</span>)</a>
+<a class="sourceLine" id="cb29-58" title="58"><span class="co">#&gt;   id agencyID         name</span></a>
+<a class="sourceLine" id="cb29-59" title="59"><span class="co">#&gt; 1 LF      ABS Labour Force</span></a></code></pre></div>
+<p>In indicator search mode, the function searches through all dimensions of a specific dataset and returns a list of dimensions and dimension contents matching all the provided regular expressions. The following examples demonstrates use of the function to find indicators within the CPI data set.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">abs_search</span>(<span class="kw">c</span>(<span class="st">&quot;All groups CPI&quot;</span>,<span class="st">&quot;Sydney&quot;</span>), <span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>)</a>
+<a class="sourceLine" id="cb30-2" title="2"><span class="co">#&gt; $REGION</span></a>
+<a class="sourceLine" id="cb30-3" title="3"><span class="co">#&gt;   Code Description</span></a>
+<a class="sourceLine" id="cb30-4" title="4"><span class="co">#&gt; 1    1      Sydney</span></a>
+<a class="sourceLine" id="cb30-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb30-6" title="6"><span class="co">#&gt; $INDEX</span></a>
+<a class="sourceLine" id="cb30-7" title="7"><span class="co">#&gt;       Code</span></a>
+<a class="sourceLine" id="cb30-8" title="8"><span class="co">#&gt; 1    10001</span></a>
+<a class="sourceLine" id="cb30-9" title="9"><span class="co">#&gt; 133 115902</span></a>
+<a class="sourceLine" id="cb30-10" title="10"><span class="co">#&gt; 134 115901</span></a>
+<a class="sourceLine" id="cb30-11" title="11"><span class="co">#&gt; 135 115922</span></a>
+<a class="sourceLine" id="cb30-12" title="12"><span class="co">#&gt; 136 115941</span></a>
+<a class="sourceLine" id="cb30-13" title="13"><span class="co">#&gt; 137 115961</span></a>
+<a class="sourceLine" id="cb30-14" title="14"><span class="co">#&gt; 138 117101</span></a>
+<a class="sourceLine" id="cb30-15" title="15"><span class="co">#&gt; 139 117104</span></a>
+<a class="sourceLine" id="cb30-16" title="16"><span class="co">#&gt; 140 117107</span></a>
+<a class="sourceLine" id="cb30-17" title="17"><span class="co">#&gt; 141 117121</span></a>
+<a class="sourceLine" id="cb30-18" title="18"><span class="co">#&gt; 142 117124</span></a>
+<a class="sourceLine" id="cb30-19" title="19"><span class="co">#&gt; 143 117127</span></a>
+<a class="sourceLine" id="cb30-20" title="20"><span class="co">#&gt; 144 128058</span></a>
+<a class="sourceLine" id="cb30-21" title="21"><span class="co">#&gt; 145 128061</span></a>
+<a class="sourceLine" id="cb30-22" title="22"><span class="co">#&gt; 146 117144</span></a>
+<a class="sourceLine" id="cb30-23" title="23"><span class="co">#&gt; 147 104122</span></a>
+<a class="sourceLine" id="cb30-24" title="24"><span class="co">#&gt; 148 131197</span></a>
+<a class="sourceLine" id="cb30-25" title="25"><span class="co">#&gt; 149 131199</span></a>
+<a class="sourceLine" id="cb30-26" title="26"><span class="co">#&gt; 150 131198</span></a>
+<a class="sourceLine" id="cb30-27" title="27"><span class="co">#&gt; 161 999901</span></a>
+<a class="sourceLine" id="cb30-28" title="28"><span class="co">#&gt;                                                                 Description</span></a>
+<a class="sourceLine" id="cb30-29" title="29"><span class="co">#&gt; 1                                                            All groups CPI</span></a>
+<a class="sourceLine" id="cb30-30" title="30"><span class="co">#&gt; 133               All groups CPI excluding Food and non-alcoholic beverages</span></a>
+<a class="sourceLine" id="cb30-31" title="31"><span class="co">#&gt; 134                                                All groups CPI excluding</span></a>
+<a class="sourceLine" id="cb30-32" title="32"><span class="co">#&gt; 135                            All groups CPI excluding Alcohol and tobacco</span></a>
+<a class="sourceLine" id="cb30-33" title="33"><span class="co">#&gt; 136                          All groups CPI excluding Clothing and footwear</span></a>
+<a class="sourceLine" id="cb30-34" title="34"><span class="co">#&gt; 137                                        All groups CPI excluding Housing</span></a>
+<a class="sourceLine" id="cb30-35" title="35"><span class="co">#&gt; 138  All groups CPI excluding Furnishings, household equipment and services</span></a>
+<a class="sourceLine" id="cb30-36" title="36"><span class="co">#&gt; 139                                         All groups CPI excluding Health</span></a>
+<a class="sourceLine" id="cb30-37" title="37"><span class="co">#&gt; 140                                      All groups CPI excluding Transport</span></a>
+<a class="sourceLine" id="cb30-38" title="38"><span class="co">#&gt; 141                                  All groups CPI excluding Communication</span></a>
+<a class="sourceLine" id="cb30-39" title="39"><span class="co">#&gt; 142                         All groups CPI excluding Recreation and culture</span></a>
+<a class="sourceLine" id="cb30-40" title="40"><span class="co">#&gt; 143                                      All groups CPI excluding Education</span></a>
+<a class="sourceLine" id="cb30-41" title="41"><span class="co">#&gt; 144               All groups CPI excluding Insurance and financial services</span></a>
+<a class="sourceLine" id="cb30-42" title="42"><span class="co">#&gt; 145   All groups CPI excluding Housing and Insurance and financial services</span></a>
+<a class="sourceLine" id="cb30-43" title="43"><span class="co">#&gt; 146                  All groups CPI excluding Medical and hospital services</span></a>
+<a class="sourceLine" id="cb30-44" title="44"><span class="co">#&gt; 147                               All groups CPI excluding 'volatile items'</span></a>
+<a class="sourceLine" id="cb30-45" title="45"><span class="co">#&gt; 148                                All groups CPI excluding food and energy</span></a>
+<a class="sourceLine" id="cb30-46" title="46"><span class="co">#&gt; 149 All groups CPI including deposit and loan facilities (indirect charges)</span></a>
+<a class="sourceLine" id="cb30-47" title="47"><span class="co">#&gt; 150                                                All groups CPI including</span></a>
+<a class="sourceLine" id="cb30-48" title="48"><span class="co">#&gt; 161                                     All groups CPI, seasonally adjusted</span></a></code></pre></div>
+<p>If <code>code_only=TRUE</code>, the indicator search function returns only codes for each matching dimension. This, in turn, can be used directly as input to the <code>filter</code> argument of the <code>abs_stats</code> function. The following two examples returns dimension codes for datasets matching “All groups CPI” (example 1) and matching both “All groups CPI” and “Sydney” (example 2).</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">abs_search</span>(<span class="kw">c</span>(<span class="st">&quot;All groups CPI&quot;</span>,<span class="st">&quot;Sydney&quot;</span>), <span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">code_only=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb31-2" title="2"><span class="co">#&gt; $REGION</span></a>
+<a class="sourceLine" id="cb31-3" title="3"><span class="co">#&gt; [1] &quot;1&quot;</span></a>
+<a class="sourceLine" id="cb31-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb31-5" title="5"><span class="co">#&gt; $INDEX</span></a>
+<a class="sourceLine" id="cb31-6" title="6"><span class="co">#&gt;  [1] &quot;10001&quot;  &quot;115902&quot; &quot;115901&quot; &quot;115922&quot; &quot;115941&quot; &quot;115961&quot; &quot;117101&quot;</span></a>
+<a class="sourceLine" id="cb31-7" title="7"><span class="co">#&gt;  [8] &quot;117104&quot; &quot;117107&quot; &quot;117121&quot; &quot;117124&quot; &quot;117127&quot; &quot;128058&quot; &quot;128061&quot;</span></a>
+<a class="sourceLine" id="cb31-8" title="8"><span class="co">#&gt; [15] &quot;117144&quot; &quot;104122&quot; &quot;131197&quot; &quot;131199&quot; &quot;131198&quot; &quot;999901&quot;</span></a></code></pre></div>
+</div>
+<div id="downloading-data-with-abs_stats" class="section level3">
+<h3>Downloading data with <code>abs_stats()</code></h3>
+<p>The <code>abs_stats()</code> function returns data from specified datasets available via the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API. The following section outlines typical use of the <code>abs_stats()</code> function, and also describes each of the core function arguments.</p>
+<p>The following example downloads original All groups CPI index numbers for each of the eight Australian state and territory capital cities and also the average for all capital cities.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">cpi &lt;-<span class="st"> </span><span class="kw">abs_stats</span>(<span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">filter=</span><span class="kw">list</span>(<span class="dt">MEASURE=</span><span class="dv">1</span>, <span class="dt">REGION=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>,<span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb32-2" title="2">                                            <span class="dt">INDEX=</span><span class="dv">10001</span>, <span class="dt">TSEST=</span><span class="dv">10</span>, <span class="dt">FREQUENCY=</span><span class="st">&quot;Q&quot;</span>))</a></code></pre></div>
+<p>The filter conditions are:</p>
+<ul>
+<li><code>MEASURE=1</code> – ‘Index Numbers’</li>
+<li><code>REGION=c(1:8,50)</code> – Each of the eight capital cities (1–8) and all eight capital cities (50)</li>
+<li><code>INDEX=10001</code> – ‘All groups CPI’</li>
+<li><code>TSEST=10</code> – ‘Original’ observations</li>
+<li><code>FREQUENCY=Q</code> – Quarterly observations</li>
+</ul>
+<pre><code>#&gt;         measure region          index adjustment_type frequency     time
+#&gt; 1 Index Numbers Sydney All groups CPI        Original Quarterly Sep-1948
+#&gt; 2 Index Numbers Sydney All groups CPI        Original Quarterly Dec-1948
+#&gt; 3 Index Numbers Sydney All groups CPI        Original Quarterly Mar-1949
+#&gt; 4 Index Numbers Sydney All groups CPI        Original Quarterly Jun-1949
+#&gt; 5 Index Numbers Sydney All groups CPI        Original Quarterly Sep-1949
+#&gt; 6 Index Numbers Sydney All groups CPI        Original Quarterly Dec-1949
+#&gt;   values obs_status unknown agency_id                     agency_name
+#&gt; 1    3.7          0      NA       ABS Australian Bureau of Statistics
+#&gt; 2    3.7          0      NA       ABS Australian Bureau of Statistics
+#&gt; 3    3.9          0      NA       ABS Australian Bureau of Statistics
+#&gt; 4    3.9          0      NA       ABS Australian Bureau of Statistics
+#&gt; 5    4.0          0      NA       ABS Australian Bureau of Statistics
+#&gt; 6    4.1          0      NA       ABS Australian Bureau of Statistics
+#&gt;                             dataset_name
+#&gt; 1 Consumer Price Index (CPI) 17th Series
+#&gt; 2 Consumer Price Index (CPI) 17th Series
+#&gt; 3 Consumer Price Index (CPI) 17th Series
+#&gt; 4 Consumer Price Index (CPI) 17th Series
+#&gt; 5 Consumer Price Index (CPI) 17th Series
+#&gt; 6 Consumer Price Index (CPI) 17th Series</code></pre>
+<p>The <code>filter</code> argument can also be set equal to “all”, in which case the function will attempt to download all observations available for the specified dataset. However, if the dataset is large it may breach the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API query length, record and/or session time constraints.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Queries that breach these limits will need to be re-specified as multiple separate calls to obtain the required data.</p>
+<p>For example, the following <code>abs_stats</code> function call, attempts to download all series available for the CPI dataset, but the specified query length (1191 characters) exceeds maximum request URL character limit.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">cpi &lt;-<span class="st"> </span><span class="kw">abs_stats</span>(<span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">filter=</span><span class="st">&quot;all&quot;</span>)</a></code></pre></div>
+<p>By default, <code>abs_stats</code> checks whether the query string length and the estimated number of records to be returned and will halt execution if the query breaches any of these conditions. Setting the <code>enforce_api_limits = FALSE</code> (default: <code>TRUE</code>) will ignore these checks and submit the query to the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API anyway—though this is not recommended. <!-- If the query fails it will return an error. For example, the following --> <!-- function call will return an error. --></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">cpi &lt;-<span class="st"> </span><span class="kw">abs_stats</span>(<span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">filter=</span><span class="st">&quot;all&quot;</span>, <span class="dt">enforce_api_limits=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<!-- #> lexical error: invalid char in json text. -->
+<!-- #>                                        http://stat.data.abs.gov.au/SDM -->
+<!-- #>                      (right here) ------^ -->
+<p>Setting the <code>return_url = TRUE</code> (default: <code>FALSE</code>) will return the RESTful URL query string, but does not submit the query to the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API, see the following example function call and output.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">abs_stats</span>(<span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">filter=</span><span class="kw">list</span>(<span class="dt">MEASURE=</span><span class="dv">1</span>, <span class="dt">REGION=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>,<span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb36-2" title="2">                                     <span class="dt">INDEX=</span><span class="dv">10001</span>, <span class="dt">TSEST=</span><span class="dv">10</span>, <span class="dt">FREQUENCY=</span><span class="st">&quot;Q&quot;</span>),</a>
+<a class="sourceLine" id="cb36-3" title="3">          <span class="dt">return_url=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb36-4" title="4"><span class="co">#&gt; [1] &quot;http://stat.data.abs.gov.au/SDMX-JSON/data/CPI/1.1+2+3+4+5+6+7+8+50.10001.10.Q/all?detail=Full&amp;dimensionAtObservation=AllDimensions&quot;</span></a></code></pre></div>
+<p>The <code>abs_search</code> function can be used to specify the filter. For example, the following code block produces the same filter list, specified in the previous example, and can subsequently be supplied to the <code>abs_stats</code> <code>filter</code> argument.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">filter_lst &lt;-<span class="st"> </span><span class="kw">abs_search</span>(<span class="kw">c</span>(<span class="st">&quot;Index numbers&quot;</span>, <span class="st">&quot;All groups&quot;</span>,</a>
+<a class="sourceLine" id="cb37-2" title="2">                           <span class="st">&quot;Sydney|Melbourne|Brisbane|Adelaide|Perth|Hobart|Darwin|Canberra|capital cities&quot;</span>,</a>
+<a class="sourceLine" id="cb37-3" title="3">                           <span class="st">&quot;Original&quot;</span>, <span class="st">&quot;Quarterly&quot;</span>),</a>
+<a class="sourceLine" id="cb37-4" title="4">                         <span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">code_only=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb37-5" title="5">cpi &lt;-<span class="st"> </span><span class="kw">abs_stats</span>(<span class="st">&quot;CPI&quot;</span>, <span class="dt">filter =</span> filter_lst)</a></code></pre></div>
+<p>Users can also limit the date range to return by specifying one or both<code>start_date</code> and <code>end_date</code> arguments. These accept either a numeric or character arguments—if numeric it must be a four-digit year. If a character string it can be either a monthly, quarterly, half-year or financial year as formatted as follows: month – ‘2016-M01’, quarter – ‘2016-Q1’, half-year – ‘2016-B2’, financial year – ‘2016-17’. The following example returns all CPI observations between September 2015 and June 2018.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">cpi &lt;-<span class="st"> </span><span class="kw">abs_stats</span>(<span class="dt">dataset=</span><span class="st">&quot;CPI&quot;</span>, <span class="dt">filter=</span>filter_lst,</a>
+<a class="sourceLine" id="cb38-2" title="2">                 <span class="dt">start_date =</span> <span class="st">&quot;2015-Q3&quot;</span>, <span class="dt">end_date =</span> <span class="st">&quot;2018-Q2&quot;</span>)</a></code></pre></div>
+<p>The other arguments <code>dimensionAtObservation</code> and <code>detail</code> provide refinements to the URL query. These need not be modified by the user—the defaults are: <code>dimensionAtObservation='AllDimensions</code> and <code>detail='Full'</code>.</p>
+</div>
+</div>
+</div>
+<div id="rba-stats-functions" class="section level1">
+<h1>RBA statistics access functions</h1>
+<div id="finding-available-rba-data-tables-with-rba_table_cache" class="section level3">
+<h3>Finding available RBA data tables with <code>rba_table_cache</code></h3>
+<p>The <code>rba_table_cache</code> function returns a dataset of all available RBA statistical tables. The function scans the RBA website and returns a list of all <a href="https://www.rba.gov.au/statistics/tables/">Statistical tables</a>, <a href="https://www.rba.gov.au/statistics/historical-data.html">Historical data tables</a> and <a href="https://www.rba.gov.au/statistics/discontinued-data.html">Discontinued data tables</a>. (The <code>rba_cachelist</code> data set included in this package contains a pre-saved list of all available RBA statistical tables.)</p>
+<p>The dataset has four columns:</p>
+<ul>
+<li>table_code</li>
+<li>table_name</li>
+<li>table_type – one of either statistical table, historical data or discontinued data.</li>
+<li>url.</li>
+</ul>
+<p>The <code>rba_table_cache</code> function has no arguments. The following example shows use of the function and the returned output.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">rba_cache &lt;-<span class="st"> </span><span class="kw">rba_table_cache</span>()</a></code></pre></div>
+<pre><code>#&gt;   table_no
+#&gt; 1       A1
+#&gt; 2       A1
+#&gt; 3       A2
+#&gt; 4       A3
+#&gt; 5       A4
+#&gt; 6       A5
+#&gt;                                                              table_name
+#&gt; 1                                      Liabilities and Assets - Summary
+#&gt; 2                                     Liabilities and Assets - Detailed
+#&gt; 3                                               Monetary Policy Changes
+#&gt; 4                                      Open Market Operations - Current
+#&gt; 5 Foreign Exchange Transactions and Holdings of Official Reserve Assets
+#&gt; 6               Daily Foreign Exchange Market Intervention Transactions
+#&gt;          table_type
+#&gt; 1 statistical table
+#&gt; 2 statistical table
+#&gt; 3 statistical table
+#&gt; 4 statistical table
+#&gt; 5 statistical table
+#&gt; 6 statistical table
+#&gt;                                                                  url
+#&gt; 1  https://www.rba.gov.au/statistics/tables/xls/a01whist-summary.xls
+#&gt; 2 https://www.rba.gov.au/statistics/tables/xls/a01whist-detailed.xls
+#&gt; 3           https://www.rba.gov.au/statistics/tables/xls/a02hist.xls
+#&gt; 4               https://www.rba.gov.au/statistics/tables/xls/a03.xls
+#&gt; 5           https://www.rba.gov.au/statistics/tables/xls/a04hist.xls
+#&gt; 6           https://www.rba.gov.au/statistics/tables/xls/a05hist.xls</code></pre>
+</div>
+<div id="search-available-data-with-rba_search" class="section level3">
+<h3>Search available data with <code>rba_search()</code></h3>
+<p>The <code>rba_search</code> function scans the RBA table cache for statistical tables matching a regular expression supplied to <code>pattern</code>. The <code>fields</code> argument specifies the fields in the RBA table cache to search—by default the function searches the <code>table_code</code> and <code>table_name</code> fields only. The <code>ignore.case</code> argument allows for case sensitive regular expression matching—the default is case insensitive matching (<code>ignore.case=TRUE</code>). The <code>update_cache</code> argument specifies specifies whether the function uses the list of RBA tables supplied with the package <code>rba_cachelist</code> (<code>update_cache=FALSE</code>, the default) or to update list of tables from the RBA website (<code>update_cache=TRUE</code>).</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">rba_search</span>(<span class="dt">pattern =</span> <span class="st">&quot;Liabilities and Assets&quot;</span>)</a>
+<a class="sourceLine" id="cb41-2" title="2"><span class="co">#&gt;     table_no                                      table_name</span></a>
+<a class="sourceLine" id="cb41-3" title="3"><span class="co">#&gt; 1         A1                Liabilities and Assets - Summary</span></a>
+<a class="sourceLine" id="cb41-4" title="4"><span class="co">#&gt; 2         A1               Liabilities and Assets - Detailed</span></a>
+<a class="sourceLine" id="cb41-5" title="5"><span class="co">#&gt; 410     A1.1 Liabilities and Assets - July 1969 to June 2015</span></a>
+<a class="sourceLine" id="cb41-6" title="6"><span class="co">#&gt;            table_type</span></a>
+<a class="sourceLine" id="cb41-7" title="7"><span class="co">#&gt; 1   statistical table</span></a>
+<a class="sourceLine" id="cb41-8" title="8"><span class="co">#&gt; 2   statistical table</span></a>
+<a class="sourceLine" id="cb41-9" title="9"><span class="co">#&gt; 410   historical data</span></a>
+<a class="sourceLine" id="cb41-10" title="10"><span class="co">#&gt;                                                                    url</span></a>
+<a class="sourceLine" id="cb41-11" title="11"><span class="co">#&gt; 1    https://www.rba.gov.au/statistics/tables/xls/a01whist-summary.xls</span></a>
+<a class="sourceLine" id="cb41-12" title="12"><span class="co">#&gt; 2   https://www.rba.gov.au/statistics/tables/xls/a01whist-detailed.xls</span></a>
+<a class="sourceLine" id="cb41-13" title="13"><span class="co">#&gt; 410      https://www.rba.gov.au/statistics/tables/xls-hist/a01hist.xls</span></a></code></pre></div>
+</div>
+<div id="accessing-rba-statistical-tables-with-rba_stats" class="section level3">
+<h3>Accessing RBA statistical tables with <code>rba_stats()</code></h3>
+<p>As previously outlined in the Quick Start section, the <code>rba_stats()</code> function provides easy access to RBA statistical tables. The <code>rba_stats()</code> function has three mutually-exclusive table selection arguments: <code>table_no</code>, <code>pattern</code>, and <code>url</code>, for selecting RBA statistical tables. Specifying <code>table_no</code> selects tables matching the specified RBA table number, e.g. A1, B1, B11.1. Specifying <code>pattern</code> selects all RBA tables matching the regular expression specified in <code>pattern</code>. The <code>url</code> argument can be used to specify one or more valid RBA statistical table URLs.</p>
+<p>The function returns a long-format (tidy) table with the following columns:</p>
+<ul>
+<li><em>series_id</em> – RBA series identifier</li>
+<li><em>date</em> – Date-format date</li>
+<li><em>value</em> – observation value</li>
+<li><em>title</em> – data item name</li>
+<li><em>description</em> – data item description</li>
+<li><em>frequency</em> – Frequency (e.g. Annual, Quarterly, Monthly, Weekly, Daily)</li>
+<li><em>type</em> – series type, one of Original, Trend, Seasonally Adjusted</li>
+<li><em>units</em> – unit of measure (e.g. Percent, $ Millions, Index Numbers, Proportion)</li>
+<li><em>source</em> – data source organisation</li>
+<li><em>data_type</em> – data type (e.g. Original, Derived)</li>
+<li><em>table_no</em> – RBA statistics table number (if available)</li>
+<li><em>table_title</em> – RBA statistics table title.</li>
+</ul>
+<p>The following examples demonstrate typical uses of the function and the various function arguments. The first example downloads RBA Statistical Table A1 – Liabilities and Assets using <code>table_no</code>.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">rba_a1 &lt;-<span class="st"> </span><span class="kw">rba_stats</span>(<span class="dt">table_no =</span> <span class="st">&quot;A1&quot;</span>)</a></code></pre></div>
+<pre><code>#&gt;         date series_id value                                 title
+#&gt; 1 1994-06-01 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 2 1994-06-08 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 3 1994-06-15 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 4 1994-06-22 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 5 1994-06-29 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 6 1994-07-06 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt;                                                             description
+#&gt; 1 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 2 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 3 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 4 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 5 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 6 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt;   frequency     type     units source publication_date table_no
+#&gt; 1    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 2    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 3    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 4    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 5    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 6    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt;                                                     table_name
+#&gt; 1 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 2 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 3 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 4 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 5 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 6 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY</code></pre>
+<p>The second example downloads the same tables using the <code>pattern</code> argument to download tables matching the regular expression: ‘Liabilities and Assets.+A1’.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">rba_a1 &lt;-<span class="st"> </span><span class="kw">rba_stats</span>(<span class="dt">pattern =</span> <span class="st">&quot;Liabilities and Assets.+Summary&quot;</span>)</a></code></pre></div>
+<p>And the third example downloads the same tables using the relevant URLs. The example presented below first returns a list of all RBA tables matching the supplied regular expression (‘Liabilities and Assets.+A1’) and then uses the returned URLs to download each data set.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">a1_tables &lt;-<span class="st"> </span><span class="kw">rba_search</span>(<span class="dt">pattern =</span> <span class="st">&quot;Liabilities and Assets.+Summary&quot;</span>)</a>
+<a class="sourceLine" id="cb45-2" title="2">rba_a1 &lt;-<span class="st"> </span><span class="kw">rba_stats</span>(<span class="dt">url =</span> a1_tables<span class="op">$</span>url)</a></code></pre></div>
+<pre><code>#&gt;         date series_id value                                 title
+#&gt; 1 1994-06-01 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 2 1994-06-08 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 3 1994-06-15 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 4 1994-06-22 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 5 1994-06-29 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt; 6 1994-07-06 ARBALCRFW   633 Capital and Reserve Bank Reserve Fund
+#&gt;                                                             description
+#&gt; 1 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 2 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 3 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 4 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 5 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt; 6 Capital and Reserve Bank Reserve Fund; see Notes for further details.
+#&gt;   frequency     type     units source publication_date table_no
+#&gt; 1    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 2    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 3    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 4    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 5    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt; 6    Weekly Original $ million    RBA       2019-03-08       A1
+#&gt;                                                     table_name
+#&gt; 1 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 2 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 3 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 4 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 5 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY
+#&gt; 6 RESERVE BANK OF AUSTRALIA - LIABILITIES AND ASSETS - SUMMARY</code></pre>
+<p>Again, the <code>update_cache</code> argument specifies whether the function uses the list of RBA tables supplied with the package with the package <code>rba_cachelist</code> (the default) or to update list of tables from the RBA website. The <code>rba_stats</code> function also optionally accepts <code>rba_search</code> arguments: <code>fields</code> and <code>ignore.case</code>, for informing pattern matching.</p>
+<p>At present, the <code>rba_stats</code> function only handles <a href="https://www.rba.gov.au/statistics/tables/">Statistical tables</a>, which have a consistently structured format comprising full metadata and observations. Functionality to handle <a href="https://www.rba.gov.au/statistics/historical-data.html">Historical data tables</a> and <a href="https://www.rba.gov.au/statistics/discontinued-data.html">Discontinued data tables</a> are in progress.</p>
+</div>
+<div id="other-rba-helper-functions" class="section level3">
+<h3>Other RBA helper functions</h3>
+<p>There are also two RBA helper functions that are called by <code>rba_stats</code>—that download and parse the RBA statistical tables. These additional functions should not ordinarily need to be called directly, but there may be situations in which users wish to access these functions directly. The functions are:</p>
+<ul>
+<li><code>rba_file_download</code></li>
+<li><code>rba_read_tss</code></li>
+</ul>
+<p>The following examples illustrate the use of these functions.</p>
+<p>The <code>rba_download</code> function downloads and saves RBA tables from a supplied URL, and returns a character vector of the saved local filenames. It is called inside the <code>rba_stats</code> function and can be used to directly download one or more RBA statistical table files. It is most usefully used in conjunction with the <code>rba_search</code> function.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">a1_tables &lt;-<span class="st"> </span><span class="kw">rba_search</span>(<span class="dt">pattern =</span> <span class="st">&quot;Liabilities and Assets.+Summary&quot;</span>)</a>
+<a class="sourceLine" id="cb47-2" title="2">downloaded_tables &lt;-<span class="st"> </span><span class="kw">rba_file_download</span>(a1_tables<span class="op">$</span>url, <span class="dt">exdir=</span><span class="kw">tempdir</span>())</a>
+<a class="sourceLine" id="cb47-3" title="3"><span class="kw">print</span>(downloaded_tables)</a></code></pre></div>
+<p>The <code>rba_read_tss</code> function extracts data from standard-format RBA statistical tables and returns it as a long-format (tidy) data frame. It is also called by the <code>rba_stats</code> function. The following call will extract data from the previously downloaded tables.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">a1_data &lt;-<span class="st"> </span><span class="kw">rba_read_tss</span>(downloaded_tables)</a></code></pre></div>
+</div>
+</div>
+<div id="using-data-returned-by-raustats" class="section level1">
+<h1>Using data returned by <code>raustats</code></h1>
+<p>Statistics returned by the <code>raustats</code> package functions are generally in long (tidy) format data frames. This provides for easy integration with packages like <code>ggplot2</code>, <code>tidyr</code> and <code>dplyr</code>. The following example illustrates how data downloaded using the <code>raustats</code> can be easily transformed and plotted. This example uses data from ABS’ <em>Private New Capital Expenditure and Expected Expenditure</em> (ABS Catalogue no. 5265.0).</p>
+<p>First download selected tables from Catalogue no. 5265.0.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">capex_q &lt;-</a>
+<a class="sourceLine" id="cb49-2" title="2"><span class="st">  </span><span class="kw">abs_cat_stats</span>(<span class="st">&quot;5625.0&quot;</span>,</a>
+<a class="sourceLine" id="cb49-3" title="3">                <span class="dt">tables=</span><span class="kw">c</span>(<span class="st">&quot;Actual Expenditure by Type of Asset and Industry - Current Prices&quot;</span>,</a>
+<a class="sourceLine" id="cb49-4" title="4">                         <span class="st">&quot;Actual Expenditure, By Type of Industry - Chain Volume Measures&quot;</span>,</a>
+<a class="sourceLine" id="cb49-5" title="5">                         <span class="st">&quot;Actual and Expected Capital Expenditure by Industry.+:Current Prices&quot;</span>))</a></code></pre></div>
+<p>Then add a new variable denoting Australian state/territory.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb50-2" title="2"><span class="co">## Add state/territory variable</span></a>
+<a class="sourceLine" id="cb50-3" title="3">capex_q &lt;-<span class="st"> </span>capex_q <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb50-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">state =</span> <span class="kw">sub</span>(<span class="kw">sprintf</span>(<span class="st">&quot;.*(%s).*&quot;</span>,</a>
+<a class="sourceLine" id="cb50-5" title="5">                             <span class="kw">paste</span>(<span class="kw">c</span>(<span class="st">&quot;New South Wales&quot;</span>,<span class="st">&quot;Victoria&quot;</span>,<span class="st">&quot;Queensland&quot;</span>,<span class="st">&quot;South Australia&quot;</span>,</a>
+<a class="sourceLine" id="cb50-6" title="6">                                     <span class="st">&quot;Western Australia&quot;</span>,<span class="st">&quot;Tasmania&quot;</span>,<span class="st">&quot;Northern Territory&quot;</span>,</a>
+<a class="sourceLine" id="cb50-7" title="7">                                     <span class="st">&quot;Australian Capital Territory&quot;</span>,<span class="st">&quot;Total </span><span class="ch">\\</span><span class="st">(State</span><span class="ch">\\</span><span class="st">)&quot;</span>),</a>
+<a class="sourceLine" id="cb50-8" title="8">                                   <span class="dt">collapse=</span><span class="st">&quot;|&quot;</span>)),</a>
+<a class="sourceLine" id="cb50-9" title="9">                     <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, data_item_description, <span class="dt">ignore.case=</span><span class="ot">TRUE</span>))</a></code></pre></div>
+<p>Finally, plot quarterly time series mining sector capital expenditure (at current prices) by Australian state and territory using <code>ggplot</code>.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb51-2" title="2"><span class="co">## Filter mining capital expenditure</span></a>
+<a class="sourceLine" id="cb51-3" title="3">capex_q_min &lt;-<span class="st"> </span>capex_q <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-4" title="4"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">grepl</span>(<span class="st">&quot;mining&quot;</span>, data_item_description, <span class="dt">ignore.case=</span><span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-5" title="5"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">grepl</span>(<span class="st">&quot;actual&quot;</span>, data_item_description, <span class="dt">ignore.case=</span><span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-6" title="6"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">grepl</span>(<span class="st">&quot;current price&quot;</span>, data_item_description, <span class="dt">ignore.case=</span><span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-7" title="7"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">grepl</span>(<span class="st">&quot;Total </span><span class="ch">\\</span><span class="st">(Type of Asset.+</span><span class="ch">\\</span><span class="st">)&quot;</span>, data_item_description, <span class="dt">ignore.case=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb51-8" title="8"></a>
+<a class="sourceLine" id="cb51-9" title="9"><span class="kw">ggplot</span>(<span class="dt">data=</span>capex_q_min) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-10" title="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>date, <span class="dt">y=</span>value<span class="op">/</span><span class="dv">10</span><span class="op">^</span><span class="dv">3</span>, <span class="dt">colour=</span>state)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-11" title="11"><span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">date_labels=</span><span class="st">&quot;%b</span><span class="ch">\n</span><span class="st">%Y&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-12" title="12"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="ot">NA</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-13" title="13"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Australian mining sector capital expenditure, by state&quot;</span>,</a>
+<a class="sourceLine" id="cb51-14" title="14">       <span class="dt">y=</span><span class="st">&quot;Capital expenditure ($ billion)&quot;</span>, <span class="dt">x=</span><span class="ot">NULL</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb51-15" title="15"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">colour =</span> <span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="ot">NULL</span>)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb51-16" title="16"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb51-17" title="17">        <span class="dt">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>,</a>
+<a class="sourceLine" id="cb51-18" title="18">        <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb51-19" title="19">        <span class="dt">axis.text.x=</span><span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">0</span>, <span class="dt">size=</span><span class="dv">8</span>))</a></code></pre></div>
+<p><img src="data:image/png;base64,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t99+/PhxAFBVdeHChUlJSSkpKRs2bGjRmfXr16emptrt9tzc3MrKytYaAYB169alp6f37du3sLCw84PUxQLDEhjGM2fOTJw4ccWKFTk5OVOnTt2+ffsDDzzQvXv3V155pbVGgsbWZDL5f1IEzhJN+vTpM2DAgJ07d+pv33///bFjxyYkJDSPwKZNm/r06ZOUlPTYY48BwH333efz+UaNGgUAb775Zp8+fdLS0h588EGn0wkARUVFeXl5+fn5M2fOvHXCiKIeFvib2IEDB3Jzc7t16+YfYjabZ82a9e9//zvo9JWVlbNmzXr77bcvXbrE8/zPf/7z1gbqjd91113vvffe3LlzX3jhBQDYsmXL+fPnS0pK9u/f/8QTTzR/Bu7ly5d/85vfHDlypLy8PDExcePGja018uGHH77yyiuHDx8+duzYhx9+2DmBuVEEDUvQMB44cGDRokWHDh2qqal59dVXN2/e/Pbbbz///POtNQLBYmu320ePHh1ilmjywAMPbN26VX/9zjvvzJw5E5pF4PPPP1+9evXBgwc///zz3bt379y5c9u2bZIkHT169Pz580888cT777//zTffeL3eZ555Rm9k3759U6ZM2bNnzy0VRhTd8EY3EVL5xdr6kn+2dS7RmtVzwnutjS0pKcnKymoxMCsr6/Dhw0Gn37FjR25ubnZ2NgCsXr06Nze3tYEAkJmZqX/NjRgx4pNPPgEATdPq6+uLi4uHDBnS4mZwycnJFy9eTElJcTgckiQ5HI7WGnn33XeXLVuWmZkJACtWrFi3bl1bY9Ihxp1736G1+X52DycPeDhxQPjTBw1L0DD269evX79+ADBw4EA9YgMHDtRvgBh+bEN/bpeoLedOHTBcx4xjpnmscaEm+MlPfrJmzRq3280wzL59+1599dXmY7du3Tpv3rz09HQA2LRpk8HwXR927NhRUFCgR3vVqlWzZ8/Wa3xycvKjjz7avJEbJ4wIXR8s8BEiWftYU3LbOhdvTAoxNiMj48CBAy0GlpWVde/evfkQ/x3BysrKDh8+PHToUP2t3W5vbWDzF/7bshYUFFy+fHnKlClWq3XFihVLly79rp88//LLL+/YsUMQBJZlMzIyWmuksrIyJydHf62X+S4x1prsJlpb58oSrW2aPmhYgobRar3aMsMw+mt/xMKPbejP7RKigSZmtDnOAMDxFCDU/YAzMzMHDRr0wQcfCIIwYsSIpKTvbSllZWUjR47UX+uH5TXtajcqKyv9AenWrVt5ebn+OiUlpcVH3DhhROj6YIGPEFvm/bbM+zu2zbFjx/7yl7+sqanRr9betGnTxIkTt2zZ8qc//QkA/JfTV1RU6C+SkpJmzJihj5VluaysrLWBEKxsVFdXL168eOXKlYcOHZo/f77/CxQACgsLd+/evWvXrtTU1Oeff76urq61RlJTU0tLS/XX/s+KvLUZkbh6P2hYAsMY+mGD4cf2mrNEnjWODMrxdlLjBQUFW7ZsMZlM99/fcstKSkrynzI/fvy4LMt6mQeAlJSU5hmYnJysvw58DtuNE0aErg+eg7+JZWdnz549e/r06UVFRaqqfv311/369evbt+/dd99ttVqPHz9eU1PjcrneeOMNffq77757+/btly5dUlX1ySefXL16dWsDg9q4ceOsWbMIISNGjDCbzfX19f5R5eXlmZmZevHevHlziIfr3HvvvS+//HJZWZnL5XrxxRc7Lhg3oqBhCRHG8Bvp8FluRjNnzvzggw927tw5Y8aMFqPy8/M3bdpUWVnpcDiWLl16+fJlAFBVlRCSl5dXWFj41VdfaZr27LPPTp8+vbX2b5EwoiiGBf7m9tJLL/30pz9duHBhXFzcpk2bFi9efOrUqT179gwdOnTGjBn9+/efOnXqI488oh9dzMrK2rBhw7Rp09LT04uLi//whz+0NrA5URSnTZsGAA8//DDLsqmpqf369cvPz584caJ/mnnz5unfhnPmzHn88cf3799/4sSJoI1MmjTpoYceGjVq1NChQ+fOndurV6/ODlEXChqWEGFsQa9b4cc29Od20jJ2obS0tGHDhvXv3z/w6Pro0aMfe+yx0aNH9+/ff+zYsQUFBRzHTZo0aeDAgQMGDHjuueemTJnSvXt3lmV//etft9b+LRJGFMXwefCdjhDS/ILz6yBJkiiKYU68efPmxMTESZMmtecTo5jP52vn42ItFgs+LjYcLperPbdd4jjOZDJ1YH8QutVgge90ES7wKDQs8BGDBR6hroWH6BFCCKEohAUeIYQQikJY4BFCCKEohAUeIYQQikJ4o5tOxzAMz7crzoG34EDXjeO4dq4OFCae59t5kV0HdgahWxBeRY8QQghFIdw1RAghhKIQFniEEEIoCmGBRwghhKIQFniEEEIoCmGBRwghhKIQFniEEEIoCmGBRwghhKIQFniEEEIoCmGBRwghhKIQFniEEEIoCmGBRwghhKIQFniEEEIoCmGBRwghhKIQFniEEEIoCv1/RVU94F8uCqYAAAAASUVORK5CYII=" /><!-- --></p>
+</div>
+<div id="unresolved-issues" class="section level1">
+<h1>Unresolved issues</h1>
+<p>There are a few behaviours of the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API that may help explain any unexpected results. As the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API is still in Beta release and subject to revision, some of these issues will be addressed in future versions of the <code>raustats</code> package, as <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> transitions towards a stable release version.</p>
+<div id="searching-in-other-languages" class="section level2">
+<h2>Searching in other languages</h2>
+<p>The <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API (Beta version) includes scope to cater to multiple languages. However, at the time of writing, French appears to be the only other language included in the data sets. Moreover, the text for many records that are denoted as French appear to be in English. The ABS API calling functions included in this library allow users to specify their preferred language, but this functionality has been little tested to date.</p>
+</div>
+<div id="query-data-and-session-constraints" class="section level2">
+<h2>Query, data and session constraints</h2>
+<p>As already noted, the <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API has a query string length limit (1000 characters) and record return limit (1 million records). We have not tested how rigorously these limits are enforced. Accordingly, the <code>abs_stats</code> function includes the <code>enforce_api_limits</code> argument to catch these limits before the query is submitted. The argument also allows the user to override the limits and submit the query anyway. This argument may be deprecated in future versions.</p>
+<p>The <a href="http://stat.data.abs.gov.au/">ABS.Stat</a> API also has a 10-minute session time limit for users to download datasets via the SDMX service. The functions in <code>raustats</code> almost exclusively use the SDMX-JSON query interface, so it is not clear whether the session time limit applies. If time limits are an issue, the ABS advises users to submit multiple smaller requests to retrieve the required data.</p>
+</div>
+</div>
+<div id="resources" class="section level1">
+<h1>Resources</h1>
+<ul>
+<li><a href="http://stat.data.abs.gov.au/">ABS.Stat – http://stat.data.abs.gov.au/</a></li>
+<li><a href="http://stat.data.abs.gov.au/">ABS.Stat FAQ</a></li>
+</ul>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://stat.data.abs.gov.au/">ABS.Stat</a> has a query string length limit (maximum of 1000 characters) on URL queries, a record return limit (1 million records) and session time limits (maximum 10-minute session time limit). (See the <a href="http://www.abs.gov.au/ausstats/abs@.nsf/Lookup/by%20Subject/1407.0.55.002~User%20Guide~Main%20Features~Frequently%20Asked%20Questions~9">ABS.Stat Web Services User Guide FAQ</a> for further details.)<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
