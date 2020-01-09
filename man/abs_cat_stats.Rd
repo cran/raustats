@@ -4,8 +4,13 @@
 \alias{abs_cat_stats}
 \title{Get ABS catalogue series data}
 \usage{
-abs_cat_stats(cat_no, tables = "All", releases = "Latest",
-  types = "tss")
+abs_cat_stats(
+  cat_no,
+  tables = "All",
+  releases = "Latest",
+  types = "tss",
+  na.rm = TRUE
+)
 }
 \arguments{
 \item{cat_no}{Character vector specifying one or more ABS collections or catalogue numbers to
@@ -21,12 +26,14 @@ examples for further details.}
 
 \item{types}{One of either 'tss' -- ABS time series spreadsheet (the default) or 'css' -- ABS
 data cube (cross-section spreadsheet).}
+
+\item{na.rm}{logical (default: \code{TRUE}) - remove observations containing missing values.}
 }
 \value{
 data frame in long format
 }
 \description{
-TBC
+This function downloads ABS catalogue series statistics, by ABS catalogue number.
 }
 \examples{
   \donttest{

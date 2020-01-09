@@ -4,11 +4,19 @@
 \alias{abs_stats}
 \title{Download data from the ABS API}
 \usage{
-abs_stats(dataset, filter, start_date, end_date, lang = c("en", "fr"),
-  dimensionAtObservation = c("AllDimensions", "TimeDimension",
-  "MeasureDimension"), detail = c("Full", "DataOnly", "SeriesKeysOnly",
-  "NoData"), enforce_api_limits = TRUE, return_url = FALSE,
-  update_cache = FALSE)
+abs_stats(
+  dataset,
+  filter,
+  start_date,
+  end_date,
+  lang = c("en", "fr"),
+  dimensionAtObservation = c("AllDimensions", "TimeDimension", "MeasureDimension"),
+  detail = c("Full", "DataOnly", "SeriesKeysOnly", "NoData"),
+  return_json = FALSE,
+  return_url = FALSE,
+  enforce_api_limits = TRUE,
+  update_cache = FALSE
+)
 }
 \arguments{
 \item{dataset}{Character vector of ABS.Stat dataset codes. These codes correspond to the
@@ -28,7 +36,11 @@ data -- '2016-17'.}
 \item{end_date}{Numeric or character (refer to \code{startdate}).}
 
 \item{lang}{Language in which to return the results. If \code{lang} is unspecified, english is
-the default.}
+the default.  ## @param remove_na If \code{TRUE}, remove blank or NA observations. If
+\code{FALSE}, no blank or NA ## values are removed from the return.  ## @param include_unit If
+\code{TRUE}, the column unit is not removed from the return. If ## \code{FALSE}, this column is
+removed.  ## @param include_obsStatus If \code{TRUE}, the column obsStatus is not removed from
+the return. If ## \code{FALSE}, this column is removed.}
 
 \item{dimensionAtObservation}{The identifier of the dimension to be attached at the observation
 level. The default order is: 'AllDimensions', 'TimeDimension' and 'MeasureDimension'.
@@ -44,13 +56,16 @@ AllDimensions results in a flat list of observations without any grouping.}
     \item NoData: returns the groups and series, including attributes and annotations, without observations (all values = NA)
   }}
 
+\item{return_json}{Logical. Default is \code{FALSE}. If \code{TRUE}, the function returns the
+result in raw sdmx-json.}
+
+\item{return_url}{Default is \code{FALSE}. If \code{TRUE}, the function returns the generated
+request URL and does not submit the request.}
+
 \item{enforce_api_limits}{If \code{TRUE} (the default), the function enforces the ABS.Stat
 RESTful API limits and will not submit the query if the URL string length exceeds 1000
 characters or the query would return more than 1 million records. If \code{FALSE}, the function
 submits the API call regardless and attempts to return the results.}
-
-\item{return_url}{Default is \code{FALSE}. If \code{TRUE}, the function returns the generated
-request URL and does not submit the request.}
 
 \item{update_cache}{Logical expression, if FALSE (default), use the cached list of available
 ABS.Stat datasets, if TRUE, update the list of available datasets.}
@@ -59,7 +74,7 @@ ABS.Stat datasets, if TRUE, update the list of available datasets.}
 Returns a data frame of the selected series from the specified ABS dataset.
 }
 \description{
-This function downloads the specified ABS data series from the ABS API.
+This function queries and returns data for a specified ABS dataset from the ABS API.
 }
 \note{
 The data query submitted by this function uses the ABS RESTful API based on the SDMX-JSON

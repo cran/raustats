@@ -19,8 +19,8 @@ test_that("abs_cat_tables fails well",
   skip_on_travis()
   skip_on_appveyor()
   
-  bad_url <- "http://www.rba.gov.au/"
-  expect_error(abs_cat_tables(bad_url));
+  invalid_cat_no <- "5205.0"
+  expect_error(abs_cat_tables(invalid_cat_no));
 })
 
 
@@ -49,7 +49,50 @@ test_that("abs_cat_tables returns a valid data.frame",
   ## ABS Catalogue tables - 1292, types="pub"
   abs_tables_1292 <- abs_cat_tables("1292.0", releases="Latest", types="pub", include_urls=TRUE);
   expect_s3_class(abs_tables_1292, "data.frame");
+
+  ## ABS Catalogue tables - 8731
+  abs_tables_8731 <- abs_cat_tables("8731.0", releases="Latest", include_urls=TRUE);
+  expect_s3_class(abs_tables_8731, "data.frame");
 })
+
+
+test_that("abs_cat_releases fails well",
+{
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_appveyor()
+
+  ## Check error on invalid ABS Cat. no.
+  bad_url <- "Invalid_Cat_no"
+  expect_error(abs_cat_releases(bad_url));
+  ## No ABS Cat. no.
+  expect_error(abs_cat_releases());
+})
+
+
+test_that("abs_cat_releases returns a valid data.frame",
+{
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_appveyor()
+
+  ## ABS Catalogue releases - 5206.0
+  abs_release_5206 <- abs_cat_releases("5206.0");
+  expect_s3_class(abs_release_5206, "data.frame");
+
+  ## ABS Catalogue releases - 5206.0, with URLs
+  abs_release_5206_url <- abs_cat_releases("5206.0", include_urls=TRUE);
+  expect_s3_class(abs_release_5206_url, "data.frame");
+
+  ## ABS Catalogue tables - 6401.0
+  abs_release_6401 <- abs_cat_releases("6401.0");
+  expect_s3_class(abs_release_6401, "data.frame");
+
+  ## ABS Catalogue tables - 6401.0, with URLs
+  abs_release_6401_url <- abs_cat_releases("6401.0", include_urls=TRUE);
+  expect_s3_class(abs_release_6401_url, "data.frame");
+})
+
 
 
 test_that("abs_local_filename created valid file name",
@@ -76,7 +119,7 @@ test_that("abs_cat_download downloads specified table files",
   skip_on_appveyor()
   
   abs_tables_5206_url <- abs_cat_tables("5206.0", releases="Latest", include_urls=TRUE);
-  downloaded_tables <- abs_cat_download(head(abs_tables_5206_url$path_2), exdir=tempdir())
+  downloaded_tables <- abs_cat_download(head(abs_tables_5206_url$path_xls, 3), exdir=tempdir());
   expect_type(downloaded_tables, "character");
   expect_match(downloaded_tables, "\\w+\\.(zip|xlsx*)$");
   expect_true(all(file.exists(downloaded_tables)))
@@ -90,8 +133,8 @@ test_that("abs_cat_unzip extracts from valid filenames",
   skip_on_appveyor()
 
   abs_tables_5206_url <- abs_cat_tables("5206.0", releases="Latest", include_urls=TRUE);
-  downloaded_tables <- sapply(head(abs_tables_5206_url$path_2),
-                              function(x) abs_cat_download(x, exdir=tempdir()));
+  downloaded_tables <- abs_cat_download(abs_tables_5206_url$path_zip %>% .[!is.na(.)],
+                                        exdir=tempdir());
   extracted_files <- abs_cat_unzip(downloaded_tables);
   expect_type(extracted_files, "character");
   expect_match(extracted_files, "\\w+\\.xlsx*$");
@@ -106,7 +149,8 @@ test_that("abs_read_tss returns valid data.frame",
   skip_on_appveyor()
 
   abs_tables_5206_url <- abs_cat_tables("5206.0", releases="Latest", include_urls=TRUE);
-  downloaded_tables <- abs_cat_download(head(abs_tables_5206_url$path_2), exdir=tempdir())
+  downloaded_tables <- abs_cat_download(abs_tables_5206_url$path_zip %>% .[!is.na(.)],
+                                        exdir=tempdir());
   extracted_files <- abs_cat_unzip(downloaded_tables)
   expect_s3_class(abs_read_tss(extracted_files[1]), "data.frame"); ## Extract one file
   expect_s3_class(abs_read_tss(extracted_files), "data.frame");    ## Extract multiple files
@@ -119,8 +163,12 @@ test_that("abs_cat_stats tss call returns valid data frame",
   skip_on_travis()
   skip_on_appveyor()
 
+  ## ABS Catalogue no. 5206.0
   expect_s3_class(abs_cat_stats("5206.0", tables="Table 1\\W+"), "data.frame");
   expect_s3_class(abs_cat_stats("5206.0", tables=c("Table 1\\W+", "Table 2\\W+")), "data.frame");
+  ## ABS Catalogue no. 6401.0
   expect_s3_class(abs_cat_stats("6401.0", tables="CPI.+All Groups"), "data.frame");
   expect_s3_class(abs_cat_stats("6401.0", tables="CPI.+All Groups", releases="Dec 2017"), "data.frame");
+  ## ABS Catalogue no. 8731.0
+  expect_s3_class(abs_cat_stats("8731.0", tables=c("TABLE 01\\W+", "TABLE 02\\W+")), "data.frame");
 })

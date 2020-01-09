@@ -1,8 +1,9 @@
 ### ABS API functions
 
 #' @name abs_api_urls
-#' @title URL chunks to be used in API calls
-#' @description This function is called inside other functions in this package.
+#' @title ABS URL addresses and paths used in ABS.Stat API calls
+#' @description This function returns a list of URLs and data paths used to construction ABS.Stat
+#'   API call. It is used in other functions in this package and need not be called directly.
 #' @return a list with a base url and a url section for formatting the JSON API calls
 #' @author David Mitchell <david.pk.mitchell@@gmail.com>
 #' @keywords internal
@@ -13,8 +14,8 @@ abs_api_urls <- function()
 
 
 #' @name abs_api_call
-#' @title Download updated indicator information from the ABS API
-#' @description TBC
+#' @title Create ABS.Stat API URL call
+#' @description The function created the ABS.Stat API call URL
 #' @param path Character vector specifying one or more ABS collections or catalogue numbers to
 #'   download.
 #' @param args Named list of arguments to supply to call.
@@ -36,8 +37,8 @@ abs_api_call <- function(path, args)
 
 
 #' @name abs_call_api
-#' @title Download specified URL
-#' @description Submit API call to ABS.Stat
+#' @title Submit API call to ABS.Stat
+#' @description This function submits the specified API call to ABS.Stat
 #' @importFrom xml2 read_xml
 #' @importFrom httr http_error
 #' @param url Character vector specifying one or more ABS collections or catalogue numbers to
@@ -56,8 +57,8 @@ abs_call_api <- function(url)
 
 
 #' @name abs_datasets
-#' @title Download updated data series information from the ABS API
-#' @description TBC
+#' @title Download ABS.Stat datasets
+#' @description This function returns a list of all datasets available from ABS.Stat.
 #' @importFrom xml2 as_list read_xml read_html xml_name xml_find_all
 #' @param lang Preferred language (default 'en' - English).
 #' @param include_notes Include ABS annotation information for each series.
@@ -109,9 +110,11 @@ abs_datasets <- function(lang="en", include_notes=FALSE)
 
 
 #' @name abs_metadata
-#' @title Download updated data series information from the ABS API
-#' @description TBC
-#' @importFrom xml2 xml_name xml_children xml_child xml_length xml_attrs xml_attr xml_ns_strip xml_text xml_find_all xml_parent
+#' @title Download dataset metadata from the ABS API
+#' @description This function queries and returns all metadata associated with a specified dataset
+#'   from ABS.Stat.
+#' @importFrom xml2 xml_name xml_children xml_child xml_length xml_attrs xml_attr xml_ns_strip
+#'   xml_text xml_find_all xml_parent
 #' @param id ABS dataset ID.
 #' @param lang Preferred language (default 'en' - English).
 #' @return data frame in long format
@@ -299,7 +302,7 @@ abs_search <- function(pattern, dataset=NULL, ignore.case=TRUE, code_only=FALSE,
 
 #' @name abs_stats
 #' @title Download data from the ABS API
-#' @description This function downloads the specified ABS data series from the ABS API.
+#' @description This function queries and returns data for a specified ABS dataset from the ABS API.
 #' @importFrom xml2 read_xml read_html
 #' @importFrom httr content GET http_error http_status http_type progress status_code
 #' @importFrom jsonlite fromJSON
@@ -317,13 +320,11 @@ abs_search <- function(pattern, dataset=NULL, ignore.case=TRUE, code_only=FALSE,
 #'   data -- '2016-17'.
 #' @param end_date Numeric or character (refer to \code{startdate}).
 #' @param lang Language in which to return the results. If \code{lang} is unspecified, english is
-#'   the default.
-## @param remove_na If \code{TRUE}, remove blank or NA observations. If \code{FALSE}, no blank or NA
-##   values are removed from the return.
-## @param include_unit If \code{TRUE}, the column unit is not removed from the return. If
-##   \code{FALSE}, this column is removed.
-## @param include_obsStatus If \code{TRUE}, the column obsStatus is not removed from the return. If
-##   \code{FALSE}, this column is removed.
+#'   the default.  ## @param remove_na If \code{TRUE}, remove blank or NA observations. If
+#'   \code{FALSE}, no blank or NA ## values are removed from the return.  ## @param include_unit If
+#'   \code{TRUE}, the column unit is not removed from the return. If ## \code{FALSE}, this column is
+#'   removed.  ## @param include_obsStatus If \code{TRUE}, the column obsStatus is not removed from
+#'   the return. If ## \code{FALSE}, this column is removed.
 #' @param dimensionAtObservation The identifier of the dimension to be attached at the observation
 #'   level. The default order is: 'AllDimensions', 'TimeDimension' and 'MeasureDimension'.
 #'   AllDimensions results in a flat list of observations without any grouping.
@@ -337,14 +338,14 @@ abs_search <- function(pattern, dataset=NULL, ignore.case=TRUE, code_only=FALSE,
 #'     \item NoData: returns the groups and series, including attributes and annotations, without observations (all values = NA)
 #'   }
 #' 
-## #' @param simplify Logical. If \code{TRUE}, the function returns data in a data frame. If
-## #'   \code{FALSE}, function returns result in raw sdmx-json format.
+#' @param return_json Logical. Default is \code{FALSE}. If \code{TRUE}, the function returns the
+#'   result in raw sdmx-json.
+#' @param return_url Default is \code{FALSE}. If \code{TRUE}, the function returns the generated
+#'   request URL and does not submit the request.
 #' @param enforce_api_limits If \code{TRUE} (the default), the function enforces the ABS.Stat
 #'   RESTful API limits and will not submit the query if the URL string length exceeds 1000
 #'   characters or the query would return more than 1 million records. If \code{FALSE}, the function
 #'   submits the API call regardless and attempts to return the results.
-#' @param return_url Default is \code{FALSE}. If \code{TRUE}, the function returns the generated
-#'   request URL and does not submit the request.
 #' @param update_cache Logical expression, if FALSE (default), use the cached list of available
 #'   ABS.Stat datasets, if TRUE, update the list of available datasets.
 #' @return Returns a data frame of the selected series from the specified ABS dataset.
@@ -378,9 +379,8 @@ abs_search <- function(pattern, dataset=NULL, ignore.case=TRUE, code_only=FALSE,
 abs_stats <- function(dataset, filter, start_date, end_date, lang=c("en","fr"),
                       dimensionAtObservation=c("AllDimensions","TimeDimension","MeasureDimension"),
                       detail=c("Full","DataOnly","SeriesKeysOnly","NoData"),
-                      ## remove_na=TRUE, include_unit=TRUE, include_obsStatus=FALSE,
-                      ## simplify=TRUE,
-                      enforce_api_limits=TRUE, return_url=FALSE, update_cache=FALSE)
+                      return_json=FALSE, return_url=FALSE,
+                      enforce_api_limits=TRUE, update_cache=FALSE)
 {
   ## Check dataset present and valid 
   if (missing(dataset))
@@ -421,7 +421,7 @@ abs_stats <- function(dataset, filter, start_date, end_date, lang=c("en","fr"),
     ## If filter is a list:
     if (any(!metadata_dims %in% names(filter))) {
       ## Check if any filter dimensions missing, and append missing elements (set to 'all')
-      warning(sprintf("Filter dimension(s): %s not in filter, added and set to 'all'.",
+      message(sprintf("Filter dimension(s): %s not in filter, dimensions added and set to 'all'.",
                       paste(metadata_dims[!metadata_dims %in% names(filter)], collapse=", ")));
       for (name in metadata_dims[!metadata_dims %in% names(filter)])
         filter[[name]] <- "all"
@@ -480,12 +480,12 @@ abs_stats <- function(dataset, filter, start_date, end_date, lang=c("en","fr"),
                              length(grep("^\\d{4}-B\\d+$", time_filter)),
                              NA_integer_)),
                     c(ifelse("Q" %in% filter$FREQUENCY,
-                               length(grep("^\\d{4}-Q\\d+$", time_filter)),
-                               NA_integer_)),
-                      c(ifelse("M" %in% filter$FREQUENCY,
-                               length(grep("^\\d{4}-M\\d+$", time_filter)),
-                               NA_integer_)),
-                      na.rm = TRUE);
+                             length(grep("^\\d{4}-Q\\d+$", time_filter)),
+                             NA_integer_)),
+                    c(ifelse("M" %in% filter$FREQUENCY,
+                             length(grep("^\\d{4}-M\\d+$", time_filter)),
+                             NA_integer_)),
+                    na.rm = TRUE);
       if (n_filter * n_time > 10^6)
         stop(sprintf(paste("Estimated number of records (%i) exceeds ABS.Stat limit (1 million).",
                            "Filter query in one or more dimensions."),
@@ -494,68 +494,73 @@ abs_stats <- function(dataset, filter, start_date, end_date, lang=c("en","fr"),
 
     ## Download data
     ## cat(sprintf("API query submitted: %s...\n", substr(url, 30)));
-    resp <- GET(url, raustats_ua(), progress())
     ## Error check URL call
-    if (http_error(resp)) {
-      stop(
-        sprintf(
-          "ABS.Stat API request failed [%s]\n%s\n<%s>", 
-          status_code(resp),
-          http_status(resp)$message,
-          http_status(resp)$reason,
-          ),
-        call. = FALSE
-      )
-    }
+    raustats_check_url_available(url)
+    resp <- GET(url, raustats_ua(), progress())
+    ## ## Error check URL call
+    ## if (http_error(resp)) {
+    ##   stop(
+    ##     sprintf(
+    ##       "ABS.Stat API request failed [%s]\n%s\n<%s>", 
+    ##       status_code(resp),
+    ##       http_status(resp)$message,
+    ##       http_status(resp)$reason,
+    ##       ),
+    ##     call. = FALSE
+    ##   )
+    ## }
     ## Check content type
     if (!grepl("draft-sdmx-json", http_type(resp))) {
       stop("ABS.Stat API did not return SDMX-JSON format", call. = FALSE)
     }
 
-    ## if (!simplify) {
-    ##   ## Return results as sdmx-json text format
-    ##   return(content(resp, as="text"))
-    ## } else {
-    ## cat("Converting query output to data frame ... ");
-        ## Convert JSON to list
-    x_json <- fromJSON(content(resp, as="text")) ## , simplifyVector = FALSE)
-    
-    ## Convert JSON format to long (tidy) data frame
-    x_obs <- x_json$dataSets$observation;
-    x_str <- x_json$structure$dimensions$observation;
-    y <- data.frame(do.call(rbind, unlist(x_obs, recursive=FALSE)));
-    ## Set names of returned records
-    y <- if (detail == "Full") {
-           setNames(y, c("values","obs_status","unknown"))
-         } else if (detail == "SeriesKeysOnly") {
-           setNames(y, c("series_key"));
-         } else if (detail == "DataOnly") {
-           setNames(y, c("values"));
-         } else { ## if (detail == NoData) {
-           setNames(y, c("values","obs_status","unknown"))
-         }
-    y <- cbind(setNames(data.frame(do.call(rbind, strsplit(row.names(y), ":"))),
-                        tolower(sub("\\s+","_", x_str$name))),
-               y);
-    ## Re-index dimension IDs from 0-based to 1-based
-    for (name in tolower(sub("\\s+","_", x_str$name)))
-      y[,name] <- as.integer(as.character(y[,name])) + 1;
-    names_y <- setNames(lapply(seq_len(nrow(x_str)),
-                               function(j) unlist(x_str[j,"values"], recursive=FALSE)
-                               ),
-                        tolower(sub("\\s+","_", x_str$name)));
-    ## Substitute dimension IDs for Names
-    for (name in names(names_y))
-      y[,name] <- names_y[[name]]$name[y[,name]]
-    ## Insert dataset_name
-    y$agency_id <- x_json$header$sender$id;
-    y$agency_name <- x_json$header$sender$name;
-    y$dataset_name <- x_json$structure$name;
-    ## Re-index rows
-    row.names(y) <- seq_len(nrow(y));
-    ## cat("completed.\n");
-    ## Return data
-    return(y);
-    ## }
+    if (return_json) {
+      ## Return results as sdmx-json text format
+      return(content(resp, as="text"))
+    } else {
+      cat("Converting query output to data frame ... \n");
+      ## Convert JSON to list
+      x_json <- fromJSON(content(resp, as="text")) ## , simplifyVector = FALSE)
+      ## Check whether data contains any observations
+      if (ncol(x_json$dataSets$observation) == 0)
+        stop(paste("API call returns no observations.",
+                   "Check ABS.Stat or inspect JSON object with `return_json=TRUE`"), call. = FALSE);
+      ## Convert JSON format to long (tidy) data frame
+      x_obs <- x_json$dataSets$observation;
+      x_str <- x_json$structure$dimensions$observation;
+      y <- data.frame(do.call(rbind, unlist(x_obs, recursive=FALSE)));
+      ## Set names of returned records
+      y <- if (detail == "Full") {
+             setNames(y, c("values","obs_status","unknown"))
+           } else if (detail == "SeriesKeysOnly") {
+             setNames(y, c("series_key"));
+           } else if (detail == "DataOnly") {
+             setNames(y, c("values"));
+           } else { ## if (detail == NoData) {
+             setNames(y, c("values","obs_status","unknown"))
+           }
+      y <- cbind(setNames(data.frame(do.call(rbind, strsplit(row.names(y), ":"))),
+                          tolower(sub("\\s+","_", x_str$name))),
+                 y);
+      ## Re-index dimension IDs from 0-based to 1-based
+      for (name in tolower(sub("\\s+","_", x_str$name)))
+        y[,name] <- as.integer(as.character(y[,name])) + 1;
+      names_y <- setNames(lapply(seq_len(nrow(x_str)),
+                                 function(j) unlist(x_str[j,"values"], recursive=FALSE)
+                                 ),
+                          tolower(sub("\\s+","_", x_str$name)));
+      ## Substitute dimension IDs for Names
+      for (name in names(names_y))
+        y[,name] <- names_y[[name]]$name[y[,name]]
+      ## Insert dataset_name
+      y$agency_id <- x_json$header$sender$id;
+      y$agency_name <- x_json$header$sender$name;
+      y$dataset_name <- x_json$structure$name;
+      ## Re-index rows
+      row.names(y) <- seq_len(nrow(y));
+      ## cat("completed.\n");
+      ## Return data
+      return(y);
+    } ## End: return_json
   }
 }
